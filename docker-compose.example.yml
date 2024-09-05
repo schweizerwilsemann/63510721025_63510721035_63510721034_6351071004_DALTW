@@ -1,0 +1,15 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sql_server_container
+    user: "0"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=
+    ports:
+      - "1533:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
