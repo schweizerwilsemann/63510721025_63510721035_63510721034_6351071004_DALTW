@@ -1,12 +1,29 @@
 import { useState } from "react";
-import { BrowserRouter, Routes } from "react-router-dom";
-import ScrollToTop from "../components/ScrollToTop";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import About from "./pages/About";
+import Search from "./pages/Search";
+import Projects from "./pages/Projects";
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes></Routes>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/projects" element={<Projects />} />
+      </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

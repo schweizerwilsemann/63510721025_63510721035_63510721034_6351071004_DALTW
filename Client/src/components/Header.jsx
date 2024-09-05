@@ -25,7 +25,7 @@ export default function Header() {
         >
           ユニクロ
         </span>
-        E-Commerce
+        E-Books
       </Link>
       <form
         onSubmit={handleSubmit}
@@ -45,12 +45,6 @@ export default function Header() {
         </Button>
         <Link to="/sign-in">
           <Button gradientDuoTone="redToYellow">Sign In</Button>
-        </Link>
-        <Link to="/shopping-cart">
-          <Button className="flex items-center gap-1" color="red" pill>
-            Cart -
-            <FontAwesomeIcon className="mt-1" icon={faShoppingCart} />
-          </Button>
         </Link>
 
         <Navbar.Toggle className="text-white bg-orange-400 hover:bg-orange-500" />
