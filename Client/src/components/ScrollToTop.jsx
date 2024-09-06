@@ -8,5 +8,4 @@ const ScrollToTop = () => {
   }, [pathname, search]);
   return null;
 };
-
 export default ScrollToTop;

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dotnet\\ReadingBooksWeb\\apis\\apis.csproj": {}
+    "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj": {}
   },
   "projects": {
-    "D:\\Dotnet\\ReadingBooksWeb\\apis\\apis.csproj": {
+    "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet\\ReadingBooksWeb\\apis\\apis.csproj",
+        "projectUniqueName": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj",
         "projectName": "apis",
-        "projectPath": "D:\\Dotnet\\ReadingBooksWeb\\apis\\apis.csproj",
+        "projectPath": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet\\ReadingBooksWeb\\apis\\obj\\",
+        "outputPath": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -52,7 +52,7 @@
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
-              "version": "[13.0.1, )"
+              "version": "[12.0.1, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -79,6 +79,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.8, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.28.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

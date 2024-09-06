@@ -144,3 +144,17 @@ D:\Dotnet\ReadingBooksWeb\apis\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.D
 D:\Dotnet\ReadingBooksWeb\apis\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\Dotnet\ReadingBooksWeb\apis\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Dotnet\ReadingBooksWeb\apis\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Dotnet\ReadingBooksWeb\Apis\obj\Debug\net8.0\apis.sourcelink.json
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\AWSSDK.Core.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\AWSSDK.SecurityToken.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\DnsClient.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\MongoDB.Bson.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\MongoDB.Driver.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\MongoDB.Driver.Core.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\MongoDB.Libmongocrypt.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\SharpCompress.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\Snappier.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\ZstdSharp.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\runtimes\linux\native\libmongocrypt.so
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
