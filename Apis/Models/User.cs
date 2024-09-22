@@ -23,4 +23,7 @@ public class User
 
     [BsonElement("is_active")]
     public bool IsActive { get; set; }
+
+    [BsonElement("is_admin")]
+    public bool IsAdmin { get; set; }
 }

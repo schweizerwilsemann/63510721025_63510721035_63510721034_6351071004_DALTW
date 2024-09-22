@@ -16,4 +16,13 @@ public class MongoDbContext
 
     public IMongoDatabase Database => _database;
 
+    public async Task<bool> UserExistsAsync(string username, string email)
+    {
+        var filter = Builders<User>.Filter.Or(
+            Builders<User>.Filter.Eq(u => u.Username, username),
+            Builders<User>.Filter.Eq(u => u.Email, email)
+        );
+        return await Users.Find(filter).AnyAsync();
+    }
+
 }

@@ -158,3 +158,4 @@ D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\ZstdSharp.dll
 D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\runtimes\linux\native\libmongocrypt.so
 D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
 D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
+D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
