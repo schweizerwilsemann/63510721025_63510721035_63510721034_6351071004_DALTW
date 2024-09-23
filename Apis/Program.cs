@@ -17,7 +17,9 @@ var databaseName = "Library";
 
 builder.Services.AddSingleton(new MongoDbContext(mongoConnectionString, databaseName));
 builder.Services.AddControllers();
-
+builder.Services.AddSession();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -58,6 +60,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseSession();
 
 // Check MongoDB connection
 using (var scope = app.Services.CreateScope())

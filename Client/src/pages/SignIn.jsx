@@ -5,24 +5,47 @@ import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/UserSlice';
+import { toast, ToastContainer } from "react-toastify";
 
 export default function SignIn() {
 
   const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isToastVisible, setIsToastVisible] = useState(false);
 
 
   const onFinish = async (values) => {
-    console.log(">>> check values: ",values);
+    console.log(">>> check values: ", values);
     try {
-      const response = await axios.post('/api/auth/login', values);
-      console.log(">>>Login successful", response.data);
-      navigate("/");
-      
+        dispatch(signInStart());
+        const response = await axios.post('/api/auth/login', values);
+        dispatch(signInSuccess(response));
+        toast.success('Login Successfully')
+        navigate("/");
+
     } catch (error) {
-      setError('Invalid username or password');
+        if (error.response && error.response.status === 401) {
+          if(!isToastVisible){
+            toast.error('Invalid username or password');
+            setIsToastVisible(true);
+            setTimeout(() => setIsToastVisible(false), 3000); 
+            dispatch(signInFailure(error.response));
+          }
+          setError('Invalid username or password');
+        } else {
+          if (!isToastVisible) {
+            toast.error('An unexpected error occurred. Please try again later.');
+            setIsToastVisible(true);
+            dispatch(signInFailure(error.response));
+            setTimeout(() => setIsToastVisible(false), 3000);
+          }
+          setError('An unexpected error occurred. Please try again later.');
+        }
+        console.error(">>>Login failed", error);
     }
-  };
+};
+
   return (
     <>
       <div className="min-h-screen mt-20">

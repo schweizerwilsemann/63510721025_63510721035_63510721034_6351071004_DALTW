@@ -1,13 +1,16 @@
 import React from "react";
-import { Button, Navbar, TextInput } from "flowbite-react";
+import { Avatar, Button, Navbar, TextInput, Dropdown } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const path = useLocation().pathname;
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,9 +46,41 @@ export default function Header() {
         <Button className="w-12 h-10 hidden sm:inline ml-3" color="red" pill>
           <FaSun />
         </Button>
-        <Link to="/sign-in">
-          <Button gradientDuoTone="redToYellow">Sign In</Button>
-        </Link>
+        {currentUser ? (
+          <Dropdown
+            arrowIcon="false"
+            inline
+            label={
+              <Avatar
+                alt="user"
+                img={`https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png`}
+                rounded
+              />
+            }
+          >
+            <Dropdown.Header>
+              <span className=" block text-sm">
+                <span className="font-bold">Username: </span>
+                {currentUser.username}
+              </span>
+              <span className=" block text-sm truncate">
+                <span className="font-bold">Email: </span>
+                {currentUser.email}
+              </span>
+            </Dropdown.Header>
+            <Link to={"/dashboard?tab=profile"}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={() => setShowModal(true)}>
+              Sign Out
+            </Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to="/sign-in">
+            <Button gradientDuoTone="redToYellow">Sign In</Button>
+          </Link>
+        )}
 
         <Navbar.Toggle className="text-white bg-orange-400 hover:bg-orange-500" />
       </div>

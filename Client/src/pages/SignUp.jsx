@@ -2,13 +2,19 @@ import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { LockOutlined, UserOutlined, MailOutlined} from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
+import axios from "axios";
 
 
 export default function SignIn() {
 
+  const navigate = useNavigate();
+  const onFinish = async (values) => {
 
-  const onFinish = (values) => {
     console.log('Received values of form: ', values);
+
+    const response = await axios.post('/api/auth/signup', values);
+    navigate('/sign-in');
+    
   };
   return (
     <>
