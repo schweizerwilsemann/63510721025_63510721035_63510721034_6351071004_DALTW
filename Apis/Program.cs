@@ -50,7 +50,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = signingKey
+        IssuerSigningKey = signingKey,
+        ClockSkew = TimeSpan.Zero 
     };
 });
 

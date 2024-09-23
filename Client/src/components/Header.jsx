@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button, Navbar, TextInput, Dropdown } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -6,15 +6,35 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  const [currentInfo, setCurrentInfo] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  const getCurrentUserInfo = async () => {
+    const response = await axios.get(`/api/users/me`, {
+      headers: { Authorization: `Bearer ${currentUser.data.token}` },
+    });
+
+    if (response) {
+      setCurrentInfo(response.data);
+    }
+  };
+
+  useEffect(() => {
+    console.log(currentInfo);
+  }, [currentInfo]);
+
+  useEffect(() => {
+    getCurrentUserInfo();
+  }, []);
+
   return (
     <Navbar className="border-b-2 ">
       <Link
@@ -60,12 +80,12 @@ export default function Header() {
           >
             <Dropdown.Header>
               <span className=" block text-sm">
-                <span className="font-bold">Username: </span>
-                {currentUser.username}
+                <span className="font-bold">Username:</span> &nbsp;
+                {currentInfo.username}{" "}
               </span>
               <span className=" block text-sm truncate">
-                <span className="font-bold">Email: </span>
-                {currentUser.email}
+                <span className="font-bold">Email: </span> &nbsp;
+                {currentInfo.email}{" "}
               </span>
             </Dropdown.Header>
             <Link to={"/dashboard?tab=profile"}>
@@ -85,13 +105,13 @@ export default function Header() {
         <Navbar.Toggle className="text-white bg-orange-400 hover:bg-orange-500" />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link active={path === "/"} as={"div"}>
+        <Navbar.Link as={`div`} active={path === "/"}>
           <Link to="/">Home</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/about"} as={"div"}>
+        <Navbar.Link as={`div`} active={path === "/about"}>
           <Link to="/about">About</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/projects"} as={"div"}>
+        <Navbar.Link as={`div`} active={path === "/projects"}>
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>

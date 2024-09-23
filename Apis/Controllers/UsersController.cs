@@ -4,6 +4,7 @@ using Apis.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using MongoDB.Bson;
 
 namespace Apis.Controllers
 {
@@ -31,13 +32,10 @@ namespace Apis.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return Unauthorized("User not found");
-            }
+            var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var user = await _context.Users.Find(u => u.Id == userId).FirstOrDefaultAsync();
+            // Query by username
+            var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
             if (user == null)
             {
                 return NotFound("User not found");
@@ -45,5 +43,6 @@ namespace Apis.Controllers
 
             return Ok(user);
         }
+
     }
 }
