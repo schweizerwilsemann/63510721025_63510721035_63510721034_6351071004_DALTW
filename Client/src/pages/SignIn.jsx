@@ -19,12 +19,24 @@ export default function SignIn() {
 
   const onFinish = async (values) => {
     console.log(">>> check values: ", values);
+
     try {
       dispatch(signInStart());
       const response = await axios.post("/api/auth/login", values);
-      dispatch(signInSuccess(response));
-      toast.success("Login Successfully");
-      navigate("/");
+      const { token } = response.data;
+      if (response) {
+        const { token } = response.data;
+
+        const currentUserInfo = await axios.get("/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        dispatch(signInSuccess(currentUserInfo.data));
+
+        toast.success("Login Successfully");
+        navigate("/");
+      }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         if (!isToastVisible) {

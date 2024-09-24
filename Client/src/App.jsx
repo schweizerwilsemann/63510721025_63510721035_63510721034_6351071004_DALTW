@@ -9,7 +9,7 @@ import SignUp from "./pages/SignUp";
 import About from "./pages/About";
 import Search from "./pages/Search";
 import Projects from "./pages/Projects";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -36,8 +36,8 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="colored"
-  />
+        theme="light"
+      />
     </BrowserRouter>
   );
 }

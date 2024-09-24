@@ -6,10 +6,10 @@ using MongoDB.Bson;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add MongoDB configuration
 var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb") 
                             ?? throw new InvalidOperationException("MongoDb connection string not found.");
 
@@ -30,7 +30,9 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    
 })
+
 .AddJwtBearer(options =>
 {
     var key = builder.Configuration["Jwt:Key"];
@@ -63,13 +65,11 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseSession();
 
-// Check MongoDB connection
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<MongoDbContext>();
     try
     {
-        // Perform a simple operation to check connection
         await context.Database.RunCommandAsync((Command<BsonDocument>)"{ping:1}");
         Console.WriteLine("MongoDB connected successfully!");
     }
@@ -79,11 +79,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
-// Define endpoints
 app.MapGet("/", () => "Hello World!");
-
-
-
 
 app.Run();
