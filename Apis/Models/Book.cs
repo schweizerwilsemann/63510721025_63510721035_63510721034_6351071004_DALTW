@@ -23,5 +23,19 @@ namespace Apis.Models
 
     [BsonElement("price")]
     public decimal Price { get; set; }
+
+    [BsonElement("username")]
+    public required string Username { get; set; }
+
+    [BsonElement("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("updated_at")]
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    [BsonElement("slug")]
+    public string? Slug { get; set; }
+    [BsonElement("image")]
+    public string? Image { get; set; }
 }
 }
