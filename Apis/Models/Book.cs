@@ -24,6 +24,7 @@ namespace Apis.Models
     [BsonElement("price")]
     public decimal Price { get; set; }
 
+    
     [BsonElement("username")]
     public required string Username { get; set; }
 
