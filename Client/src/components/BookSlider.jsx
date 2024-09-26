@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -7,6 +8,16 @@ import "./styles.css";
 import { Pagination, Navigation } from "swiper/modules";
 
 import { Book } from "../components/Book";
+=======
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css' // Import Swiper styles
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+
+import { Pagination, Navigation } from 'swiper/modules'
+
+import { Book } from '../components/Book'
+>>>>>>> f41dec57fd4557cb40a1aed37f31f6ab62d009a3
 
 export const BookSlider = ({ books }) => {
   return (
@@ -37,9 +48,13 @@ export const BookSlider = ({ books }) => {
       pagination={{
         clickable: true,
       }}
+<<<<<<< HEAD
       loop={true}
       modules={[Navigation]}
       navigation={true}
+=======
+      modules={[Navigation]}
+>>>>>>> f41dec57fd4557cb40a1aed37f31f6ab62d009a3
     >
       {books.map((book) => (
         <SwiperSlide key={book.id}>
@@ -47,5 +62,10 @@ export const BookSlider = ({ books }) => {
         </SwiperSlide>
       ))}
     </Swiper>
+<<<<<<< HEAD
   );
 };
+=======
+  )
+}
+>>>>>>> f41dec57fd4557cb40a1aed37f31f6ab62d009a3

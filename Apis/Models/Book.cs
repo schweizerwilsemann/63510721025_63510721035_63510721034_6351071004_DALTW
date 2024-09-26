@@ -39,6 +39,7 @@ namespace Apis.Models
 
     [BsonElement("slug")]
     public string? Slug { get; set; }
+    
     [BsonElement("image")]
     public string? Image { get; set; }
 }
