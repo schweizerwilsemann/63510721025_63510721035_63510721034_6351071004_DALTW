@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import Projects from "./pages/Projects";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UploadBook } from "./pages/UploadBook";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/uploadbook" element={<UploadBook />} />
       </Routes>
       <Footer />
       <ToastContainer
