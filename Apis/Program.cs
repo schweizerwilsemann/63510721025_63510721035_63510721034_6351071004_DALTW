@@ -80,5 +80,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGet("/", () => "Hello World!");
+app.MapGet("/detail", () => "noher");
 
 app.Run();
