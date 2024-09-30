@@ -12,6 +12,7 @@ import Projects from "./pages/Projects";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UploadBook } from "./pages/UploadBook";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/uploadbook" element={<UploadBook />} />
+        <Route path="/404-not-found" element={<NotFound />} />
       </Routes>
       <Footer />
       <ToastContainer
