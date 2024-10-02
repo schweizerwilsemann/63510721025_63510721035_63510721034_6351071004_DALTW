@@ -1,6 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using System.Collections;
 
 namespace Apis.Models;
 public class User
@@ -26,4 +27,8 @@ public class User
 
     [BsonElement("is_admin")]
     public bool IsAdmin { get; set; }
+    [BsonElement("saved_books")]
+    public Array? SavedBooks { get; set; }
+    [BsonElement("photoURL")]
+    public string ?PhotoURL { get; set; }
 }

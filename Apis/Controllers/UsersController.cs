@@ -32,7 +32,7 @@ namespace Apis.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
 
             // Query by username
             var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();

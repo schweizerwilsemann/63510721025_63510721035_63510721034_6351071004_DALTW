@@ -60,10 +60,10 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+app.UseSession(); 
+app.UseAuthentication(); 
 app.UseAuthorization();
 app.MapControllers();
-app.UseSession();
 
 using (var scope = app.Services.CreateScope())
 {

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.Marshalling;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -24,6 +25,9 @@ namespace Apis.Models
     [BsonElement("price")]
     public decimal Price { get; set; }
 
+    [BsonElement("content")]
+    public required string Content { get; set; }
+    
     [BsonElement("username")]
     public required string Username { get; set; }
 

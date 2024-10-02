@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Flex } from "antd";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   signInStart,
   signInSuccess,
   signInFailure,
 } from "../redux/user/UserSlice";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [error, setError] = useState("");
@@ -23,9 +23,10 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
       const response = await axios.post("/api/auth/login", values);
-      const { token } = response.data;
+
       if (response) {
         const { token } = response.data;
+        localStorage.setItem("token", token);
 
         const currentUserInfo = await axios.get("/api/users/me", {
           headers: {
