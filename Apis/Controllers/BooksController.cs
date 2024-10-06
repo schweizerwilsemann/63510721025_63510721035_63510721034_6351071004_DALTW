@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using Apis.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Unidecode.NET;
 
 namespace Apis.Controllers;
 [ApiController]
@@ -24,6 +25,7 @@ public class BooksController : ControllerBase{
         var books = await _context.Books.Find(FilterDefinition<Book>.Empty).ToListAsync();
         return Ok(books);
     }
+  
 
     [HttpPost]
     [Authorize]
@@ -65,6 +67,7 @@ public class BooksController : ControllerBase{
     }
 
     var slug = newBook.Title
+        .Unidecode()
         .ToLower()
         .Replace(" ", "-")
         .Replace("[^a-zA-Z0-9-]", "");

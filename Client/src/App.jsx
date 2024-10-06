@@ -13,6 +13,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UploadBook } from "./pages/UploadBook";
 import NotFound from "./pages/NotFound";
+import DashProfile from "./components/DashProfile";
+import { Dashboard } from "./pages/Dashboard";
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/uploadbook" element={<UploadBook />} />
         <Route path="/404-not-found" element={<NotFound />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
       <ToastContainer
