@@ -1,12 +1,12 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "./styles.css";
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import './styles.css'
 
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination, Navigation } from 'swiper/modules'
 
-import { Book } from "../components/Book";
+import { Book } from '../components/Book'
 
 export const BookSlider = ({ books }) => {
   return (
@@ -47,5 +47,5 @@ export const BookSlider = ({ books }) => {
         </SwiperSlide>
       ))}
     </Swiper>
-  );
-};
+  )
+}

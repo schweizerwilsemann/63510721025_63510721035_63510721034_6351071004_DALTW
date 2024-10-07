@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
-import { Button, Flex, Form, Input, DatePicker, InputNumber } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  DatePicker,
+  InputNumber,
+  message,
+} from "antd";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,7 +30,8 @@ export const UploadBook = () => {
   const [form] = Form.useForm();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState([]);
+  const [imageFileList, setImageFileList] = useState([]); // Danh sách file ảnh
+  const [pdfFileList, setPdfFileList] = useState([]); // Danh sách file PDF
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
@@ -31,9 +40,25 @@ export const UploadBook = () => {
     }
   }, [currentUser, navigate]);
 
-  const handleChange = async ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const handleImageChange = async ({ fileList: newFileList }) => {
+    setImageFileList(newFileList);
+
+    if (newFileList.length > 0) {
+      const file = newFileList[newFileList.length - 1].originFileObj;
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => setPreviewImage(e.target.result);
+        reader.readAsDataURL(file);
+      } else {
+        setPreviewImage(null);
+      }
+    }
   };
+
+  const handlePdfChange = async ({ fileList: newFileList }) => {
+    setPdfFileList(newFileList);
+  };
+
   const uploadButton = (
     <button
       style={{
@@ -57,12 +82,22 @@ export const UploadBook = () => {
     const { username, title, author, genre, price, content } = values;
 
     let imageUrl = null;
+    let pdfUrl = null;
 
     try {
-      if (fileList.length > 0) {
-        const file = fileList[fileList.length - 1].originFileObj;
+      // Upload ảnh
+      if (imageFileList.length > 0) {
+        const imageFile = imageFileList[imageFileList.length - 1].originFileObj;
         setIsUploading(true);
-        imageUrl = await uploadToFirebase(file);
+        imageUrl = await uploadToFirebase(imageFile, "images");
+        setIsUploading(false);
+      }
+
+      // Upload PDF
+      if (pdfFileList.length > 0) {
+        const pdfFile = pdfFileList[pdfFileList.length - 1].originFileObj;
+        setIsUploading(true);
+        pdfUrl = await uploadToFirebase(pdfFile, "pdfs");
         setIsUploading(false);
       }
 
@@ -70,6 +105,7 @@ export const UploadBook = () => {
         published_year: values.published_year.$y,
         username: username,
         image: imageUrl,
+        pdfURL: pdfUrl,
         title: title,
         author: author,
         genre: genre,
@@ -96,10 +132,10 @@ export const UploadBook = () => {
     }
   };
 
-  const uploadToFirebase = async (file) => {
+  const uploadToFirebase = async (file, folder) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
+    const storageRef = ref(storage, `${folder}/${fileName}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     return new Promise((resolve, reject) => {
@@ -108,6 +144,7 @@ export const UploadBook = () => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
         },
         (error) => {
           console.error("Upload failed:", error);
@@ -116,7 +153,7 @@ export const UploadBook = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL); // return URL
+            resolve(downloadURL);
           });
         }
       );
@@ -157,16 +194,20 @@ export const UploadBook = () => {
           >
             <Input type="" disabled={true} />
           </Form.Item>
+
+          {/* Upload ảnh */}
           <Form.Item name="image" label="Upload Image">
             <Upload
               action={""}
               listType="picture-card"
-              fileList={fileList}
-              onChange={handleChange}
+              fileList={imageFileList}
+              onChange={handleImageChange}
             >
-              {fileList.length >= 1 ? null : uploadButton}
+              {imageFileList.length >= 1 ? null : uploadButton}
             </Upload>
           </Form.Item>
+
+          {/* Hiển thị ảnh preview */}
           {previewImage && (
             <Image
               wrapperStyle={{
@@ -180,6 +221,26 @@ export const UploadBook = () => {
               src={previewImage}
             />
           )}
+
+          {/* Upload PDF */}
+          <Form.Item name="file" label="Upload File (PDF)">
+            <Upload
+              action={null}
+              fileList={pdfFileList}
+              onChange={handlePdfChange}
+              beforeUpload={(file) => {
+                const isImage = file.type.startsWith("image/");
+                const isPDF = file.type === "application/pdf";
+                if (!isImage && !isPDF) {
+                  message.error("You can only upload image or PDF file!");
+                  return Upload.LIST_IGNORE;
+                }
+                return true;
+              }}
+            >
+              {pdfFileList.length >= 1 ? null : uploadButton}
+            </Upload>
+          </Form.Item>
 
           <Form.Item
             name="title"
@@ -241,45 +302,27 @@ export const UploadBook = () => {
                 `$ ${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(price) => price?.replace(/\$\s?|(,*)/g, "")}
+              style={{
+                width: "100%",
+              }}
             />
           </Form.Item>
-
           <Form.Item
             name="content"
             label="Content"
             rules={[
               {
-                required: true,
+                required: false,
               },
             ]}
           >
-            <Input.TextArea rows={10} />
+            <Input.TextArea showCount maxLength={200} />
           </Form.Item>
-
-          <Form.Item
-            wrapperCol={{
-              offset: 6,
-            }}
-          >
-            <Flex gap="small">
-              {isUploading && <Spin />}
-              <Button
-                className="bg-orange-400 text-sky-50"
-                htmlType="submit"
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#FFFF00")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#f97316")
-                }
-              >
-                Upload
-              </Button>
-              <Button danger onClick={() => form.resetFields()}>
-                Reset
-              </Button>
-            </Flex>
-          </Form.Item>
+          <Flex justify="center">
+            <Button type="primary" htmlType="submit" disabled={isUploading}>
+              {isUploading ? <Spin /> : "Submit"}
+            </Button>
+          </Flex>
         </Form>
       )}
     </>
