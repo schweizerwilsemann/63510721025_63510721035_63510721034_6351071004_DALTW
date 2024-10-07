@@ -1,1 +1,4 @@
 docker-compose.yml
+Apis/appsettings.Development.json
+Apis/bin
+Apis/obj

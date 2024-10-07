@@ -7,7 +7,7 @@ export const Book = ({ book }) => {
     <div className="text-center cursor-pointer select-none">
       <Link to={`/books/${book.slug}`}>
         <img
-          className="w-full h-56 sm:h-56 md:h-60 lg:h-64 xl:h-64 object-cover"
+          className="w-full h-56 sm:h-52 md:h-52 lg:h-56 xl:h-56 object-cover"
           src={book.image}
           alt={`${book.title}-image`}
         />

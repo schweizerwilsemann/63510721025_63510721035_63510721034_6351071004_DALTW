@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp'
 import About from './pages/About'
 import Search from './pages/Search'
 import Projects from './pages/Projects'
+import BookDetail from './pages/BookDetail'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { UploadBook } from './pages/UploadBook'
@@ -26,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/books" element={<Navigate to="/" />} />
+        <Route path="/books/:slug" element={<BookDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />

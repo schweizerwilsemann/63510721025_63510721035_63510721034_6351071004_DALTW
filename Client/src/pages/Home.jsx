@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { BookSlider } from '../components/BookSlider'
 import { Banner } from '../components/Banner'
+import ReaderForm from '../components/ReaderForm'
 
 const Home = () => {
   const [books, setBooks] = useState([])
@@ -42,9 +43,16 @@ const Home = () => {
         <h2 className="font-bold my-6 text-xl uppercase">Truyện Hot 🔥</h2>
         <BookSlider books={books} />
       </div>
+
       <div className="new mx-4">
         <h2 className="font-bold my-6 text-xl uppercase">Truyện Mới 💦</h2>
         <BookSlider books={books} />
+      </div>
+
+      <div className="new mx-4">
+        <h2 className="font-bold my-6 text-xl uppercase">Khảo Sát 📝</h2>
+        <ReaderForm />
+        <br />
       </div>
     </div>
   )

@@ -321,3 +321,4 @@ D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\refint\apis.dll
 D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\apis.pdb
 D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\apis.genruntimeconfig.cache
 D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\ref\apis.dll
+D:\Code\dotnet\books-webapplication2\Apis\bin\Debug\net8.0\Unidecode.NET.dll

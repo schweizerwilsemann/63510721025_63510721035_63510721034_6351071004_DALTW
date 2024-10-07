@@ -1,0 +1,160 @@
+[33mcommit 35b9304d71414a500fc59a8d427bd41d7a7c0e37[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 2c32cc0 8952a85
+Author: hoang95633 <leminhoang2004@gmail.com>
+Date:   Mon Oct 7 15:58:26 2024 +0700
+
+    Merge branch 'main' of https://github.com/schweizerwilsemann/books-webapplication
+
+[33mcommit 2c32cc0d92d31def9db43b3ad3189c7b6f9870c3[m
+Author: hoang95633 <leminhoang2004@gmail.com>
+Date:   Mon Oct 7 15:51:23 2024 +0700
+
+    detail page for book
+
+[33mcommit 8952a8567b8398abdee15f384799277ec9e074fe[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Mon Oct 7 10:53:48 2024 +0700
+
+    update admin view, api
+
+[33mcommit be1b9a287fb3abfcc5a5987fe7b8beceea7a0d70[m
+Merge: 27be84a 8fc12b9
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Sun Oct 6 13:22:21 2024 +0700
+
+    Giải quyết xung đột merge
+
+[33mcommit 27be84a723cb008e2065ccbc262b500b7a175804[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Sun Oct 6 13:07:20 2024 +0700
+
+    User CRUD completed. User UI
+
+[33mcommit 8fc12b9d247168ed248280c5e03d8aa626663eeb[m
+Author: mhoang2004 <109902268+mhoang2004@users.noreply.github.com>
+Date:   Wed Oct 2 09:59:16 2024 +0700
+
+    Update appsettings.json
+
+[33mcommit 521515f59c6d29f225f3644a9d9a490b728bb64a[m
+Merge: 9c73e5f d816d06
+Author: hoang95633 <leminhoang2004@gmail.com>
+Date:   Wed Oct 2 09:50:22 2024 +0700
+
+    Merge branch 'main' of https://github.com/schweizerwilsemann/books-webapplication
+
+[33mcommit 9c73e5fc0179ff8f77763ad54ed9bcec723a9719[m
+Author: hoang95633 <leminhoang2004@gmail.com>
+Date:   Wed Oct 2 09:48:37 2024 +0700
+
+    detail page
+
+[33mcommit d816d06c1c5e86f85e5d418d00bf3dbebe39df9a[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Mon Sep 30 07:30:52 2024 +0700
+
+    Created book API and UI upload book
+
+[33mcommit 644cc2275de18831bb131c61c3ba8101c5929a03[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 17:19:58 2024 +0700
+
+    Add infinte loop for the slider
+
+[33mcommit 85f6632cf4a64f9333737cb6fb9ab2542191130a[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 17:06:49 2024 +0700
+
+    fix post book api(add middleware), config jwt again
+
+[33mcommit c9f10b7afdebe7d23c298f55b516f29ff18f7dec[m
+Merge: 45ccf22 49e895f
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 17:05:04 2024 +0700
+
+    Merge branch 'main' of https://github.com/schweizerwilsemann/books-webapplication
+
+[33mcommit 45ccf2231fe70865f236add9338962a7534c0017[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 16:55:59 2024 +0700
+
+    Fix to add middleware post book api. and Config jwt again
+
+[33mcommit 49e895f094145dcd1f0c97d5ca220e30ed4fc1d2[m
+Merge: 03c12c3 f41dec5
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 09:51:56 2024 +0700
+
+    add upload a book api
+
+[33mcommit 03c12c3cf297878b176fc7928eeb6e359b934cca[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 09:50:03 2024 +0700
+
+    add API createbook ()
+
+[33mcommit 93f5f8dbe0037d5cdd8e19d1fe8674ea94869c8d[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 08:02:48 2024 +0700
+
+    update .gitignore
+
+[33mcommit a7718ad492db4859ff724f220385e34dca546ef6[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 26 01:20:21 2024 +0700
+
+    Change gitignore
+
+[33mcommit f41dec57fd4557cb40a1aed37f31f6ab62d009a3[m
+Author: hoang95633 <leminhoang2004@gmail.com>
+Date:   Wed Sep 25 11:03:01 2024 +0700
+
+    home page
+
+[33mcommit 6616921d0068914e5a05a2c5b932cab7c1c9696e[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Wed Sep 25 10:02:37 2024 +0700
+
+    updated model
+
+[33mcommit 34502c5db28a1e8d06eb9690aaffdace7b273dac[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Tue Sep 24 16:33:53 2024 +0700
+
+    handled logout and fix fetch username while login
+
+[33mcommit 31586dec1125d3fe3bff094779e1d9159c5a8fdf[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Tue Sep 24 06:07:56 2024 +0700
+
+    fetch current user data modified its own API
+
+[33mcommit f58d289659c661bdded95dd784372f85069f14b6[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Mon Sep 23 11:07:14 2024 +0700
+
+    handle the logic of sign up and sign in page. Write the API two of them
+
+[33mcommit ae410a7ae0ba3b51287fd9bb6c19123f8b0645a4[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Sun Sep 22 21:32:06 2024 +0700
+
+    add sign in enđpoint. Createdlog in and sign up pages.
+
+[33mcommit ccee8ae0255f4208542530b045bbe8f14ee54fee[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Fri Sep 6 18:43:51 2024 +0700
+
+    Change the database to MongoDB. Config again to connect to MongoDb
+
+[33mcommit 13849d8f3265574c4b6ed130f1501ba39220481a[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 5 10:54:10 2024 +0700
+
+    add frontend template
+
+[33mcommit 99a4bf1175bc493c45b6850e5e36ce945a8f3775[m
+Author: project_Html <khoanguyenduc99@gmail.com>
+Date:   Thu Sep 5 10:27:45 2024 +0700
+
+    config the project
