@@ -42,5 +42,7 @@ namespace Apis.Models
     
     [BsonElement("image")]
     public string? Image { get; set; }
+    [BsonElement("pdfUrl")]
+    public string? PdfUrl { get; set; }
 }
 }

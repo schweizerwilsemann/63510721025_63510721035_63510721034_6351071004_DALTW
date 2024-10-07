@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Dc1n2zZEQ3w=",
+  "dgSpecHash": "+o3ADoCRM64=",
   "success": true,
   "projectFilePath": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj",
   "expectedPackageFiles": [
@@ -103,6 +103,7 @@
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
+    "C:\\Users\\ADMIN\\.nuget\\packages\\unidecode.net\\2.1.0\\unidecode.net.2.1.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
   ],
   "logs": []
