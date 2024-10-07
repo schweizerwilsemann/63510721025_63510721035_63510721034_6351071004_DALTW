@@ -1,18 +1,17 @@
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/navigation'
-import './styles.css'
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "./styles.css";
 
-import { Pagination, Navigation } from 'swiper/modules'
+import { Pagination, Navigation, Autoplay } from "swiper/modules"; // Import Autoplay module
 
-import { Book } from '../components/Book'
+import { Book } from "../components/Book";
 
 export const BookSlider = ({ books }) => {
   return (
     <Swiper
       breakpoints={{
-        // When window width is >= 320px
         320: {
           slidesPerView: 2,
           spaceBetween: 10,
@@ -34,11 +33,12 @@ export const BookSlider = ({ books }) => {
           spaceBetween: 20,
         },
       }}
-      pagination={{
-        clickable: true,
-      }}
       loop={true}
-      modules={[Navigation]}
+      autoplay={{
+        delay: 3000,
+        disableOnInteraction: false,
+      }}
+      modules={[Navigation, Autoplay]}
       navigation={true}
     >
       {books.map((book) => (
@@ -47,5 +47,5 @@ export const BookSlider = ({ books }) => {
         </SwiperSlide>
       ))}
     </Swiper>
-  )
-}
+  );
+};
