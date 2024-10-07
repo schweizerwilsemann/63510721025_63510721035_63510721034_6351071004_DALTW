@@ -312,11 +312,11 @@ export const UploadBook = () => {
             label="Content"
             rules={[
               {
-                required: false,
+                required: true,
               },
             ]}
           >
-            <Input.TextArea showCount maxLength={200} />
+            <Input.TextArea rows={10} />
           </Form.Item>
           <Flex justify="center">
             <Button type="primary" htmlType="submit" disabled={isUploading}>
