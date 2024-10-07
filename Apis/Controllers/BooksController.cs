@@ -10,7 +10,8 @@ namespace Apis.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class BooksController : ControllerBase{
+public class BooksController : ControllerBase
+{
     private readonly MongoDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -21,11 +22,27 @@ public class BooksController : ControllerBase{
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetBooks () {
+    public async Task<IActionResult> GetBooks()
+    {
         var books = await _context.Books.Find(FilterDefinition<Book>.Empty).ToListAsync();
         return Ok(books);
     }
-  
+
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> GetBookBySlug(string slug)
+    {
+        var book = await _context.Books
+                                 .Find(b => b.Slug == slug)
+                                 .FirstOrDefaultAsync();
+
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(book);
+    }
+
 
     [HttpPost]
     [Authorize]
@@ -85,6 +102,4 @@ public class BooksController : ControllerBase{
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
-
-
 }

@@ -37,7 +37,7 @@ namespace Apis.Controllers
             // Check if the password is hashed
             if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                
+
                 // If not, hash the plain text password and update the user record
                 if (user.PasswordHash == request.Password)
                 {
@@ -106,7 +106,7 @@ namespace Apis.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        
+
     }
 
     public class SignUpRequest

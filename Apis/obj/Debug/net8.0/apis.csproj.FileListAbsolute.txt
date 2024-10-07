@@ -321,4 +321,8 @@ D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\refint\apis.dll
 D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\apis.pdb
 D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\apis.genruntimeconfig.cache
 D:\Code\dotnet\books-webapplication2\Apis\obj\Debug\net8.0\ref\apis.dll
+<<<<<<< HEAD
 D:\Dotnet\ReadingBooksWeb\Apis\bin\Debug\net8.0\Unidecode.NET.dll
+=======
+D:\Code\dotnet\books-webapplication2\Apis\bin\Debug\net8.0\Unidecode.NET.dll
+>>>>>>> cc98a7c6a92dcb3cd16e13cd98d5965aa24e11ef
