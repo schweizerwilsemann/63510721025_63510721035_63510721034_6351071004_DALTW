@@ -116,7 +116,6 @@ export const UploadBook = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.success("Upload successful!");
             resolve(downloadURL); // return URL
           });
         }
@@ -160,7 +159,7 @@ export const UploadBook = () => {
           </Form.Item>
           <Form.Item name="image" label="Upload Image">
             <Upload
-              action={null}
+              action={""}
               listType="picture-card"
               fileList={fileList}
               onChange={handleChange}

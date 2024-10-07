@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj": {}
+    "D:\\Code\\dotnet\\books-webapplication2\\Apis\\apis.csproj": {}
   },
   "projects": {
-    "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj": {
+    "D:\\Code\\dotnet\\books-webapplication2\\Apis\\apis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj",
+        "projectUniqueName": "D:\\Code\\dotnet\\books-webapplication2\\Apis\\apis.csproj",
         "projectName": "apis",
-        "projectPath": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\apis.csproj",
-        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "D:\\Dotnet\\ReadingBooksWeb\\Apis\\obj\\",
+        "projectPath": "D:\\Code\\dotnet\\books-webapplication2\\Apis\\apis.csproj",
+        "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
+        "outputPath": "D:\\Code\\dotnet\\books-webapplication2\\Apis\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -99,6 +99,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.0.2, )"
+            },
+            "Unidecode.NET": {
+              "target": "Package",
+              "version": "[2.1.0, )"
             }
           },
           "imports": [
@@ -120,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

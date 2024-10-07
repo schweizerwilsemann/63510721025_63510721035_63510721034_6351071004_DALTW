@@ -30,10 +30,14 @@ namespace Apis.Controllers
             {
                 return Unauthorized("Invalid username or password");
             }
-
+            if (!user.IsActive)
+            {
+                return Unauthorized("User is deleted");
+            }
             // Check if the password is hashed
             if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
+                
                 // If not, hash the plain text password and update the user record
                 if (user.PasswordHash == request.Password)
                 {
