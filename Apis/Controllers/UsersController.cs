@@ -24,6 +24,30 @@ namespace Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
+            var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            if (currentUsername == null)
+            {
+                Console.WriteLine(">>> currentUsername is null");
+            }
+            else
+            {
+                Console.WriteLine(">>> check current user: " + currentUsername);
+            }
+
+            var claims = _httpContextAccessor.HttpContext?.User.Claims;
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+
+            var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+            Console.WriteLine(">>> check user: " + user?.Username);
+
+            if (user == null || !user.IsAdmin)
+            {
+                return Forbid("You do not have permission to get users!");
+            }
+
             var users = await _context.Users.Find(FilterDefinition<User>.Empty).ToListAsync();
             return Ok(users);
         }
@@ -106,6 +130,30 @@ namespace Apis.Controllers
         [HttpPut("activate/{id}")]
         public async Task<IActionResult> ActivateUser(string id)
         {
+             var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            if (currentUsername == null)
+            {
+                Console.WriteLine(">>> currentUsername is null");
+            }
+            else
+            {
+                Console.WriteLine(">>> check current user: " + currentUsername);
+            }
+
+            var claims = _httpContextAccessor.HttpContext?.User.Claims;
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+
+            var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+            Console.WriteLine(">>> check user: " + user?.Username);
+
+            if (user == null || !user.IsAdmin)
+            {
+                return Forbid("You do not have permission to activate this user!");
+            }
+
             var filter = Builders<User>.Filter.Eq("_id", new ObjectId(id));
             var update = Builders<User>.Update.Set("IsActive", true);
 
