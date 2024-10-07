@@ -198,6 +198,7 @@ export const UploadBook = () => {
           {/* Upload ảnh */}
           <Form.Item name="image" label="Upload Image">
             <Upload
+              customRequest={({ onSuccess }) => onSuccess("ok")}
               action={""}
               listType="picture-card"
               fileList={imageFileList}
@@ -225,6 +226,7 @@ export const UploadBook = () => {
           {/* Upload PDF */}
           <Form.Item name="file" label="Upload File (PDF)">
             <Upload
+              customRequest={({ onSuccess }) => onSuccess("ok")}
               action={null}
               fileList={pdfFileList}
               onChange={handlePdfChange}
