@@ -1,21 +1,22 @@
-import { useState } from 'react'
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import ScrollToTop from './components/ScrollToTop'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import SignIn from './pages/SignIn'
-import SignUp from './pages/SignUp'
-import About from './pages/About'
-import Search from './pages/Search'
-import Projects from './pages/Projects'
-import BookDetail from './pages/BookDetail'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { UploadBook } from './pages/UploadBook'
-import NotFound from './pages/NotFound'
+import { useState } from "react";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import About from "./pages/About";
+import Search from "./pages/Search";
+import Projects from "./pages/Projects";
+import BookDetail from "./pages/BookDetail";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UploadBook } from "./pages/UploadBook";
+import NotFound from "./pages/NotFound";
 
-import { Dashboard } from './pages/Dashboard'
+import { Dashboard } from "./pages/Dashboard";
+import { BookContent } from "./pages/BookContent";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/uploadbook" element={<UploadBook />} />
         <Route path="/404-not-found" element={<NotFound />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/pdf" element={<BookContent />} />
       </Routes>
 
       <Footer />
@@ -53,7 +55,7 @@ function App() {
         theme="light"
       />
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

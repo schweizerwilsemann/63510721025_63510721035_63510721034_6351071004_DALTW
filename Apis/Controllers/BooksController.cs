@@ -48,24 +48,11 @@ public class BooksController : ControllerBase
     [Authorize]
     public async Task<IActionResult> PostBook(Book newBook)
     {
-        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
-        if (currentUsername == null)
-        {
-            Console.WriteLine(">>> currentUsername is null");
-        }
-        else
-        {
-            Console.WriteLine(">>> check current user: " + currentUsername);
-        }
-
-        var claims = _httpContextAccessor.HttpContext?.User.Claims;
-        foreach (var claim in claims)
-        {
-            Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-        }
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
 
         var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
-        Console.WriteLine(">>> check user: " + user?.Username);
+        
 
         if (user == null || !user.IsAdmin)
         {

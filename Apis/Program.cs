@@ -35,7 +35,7 @@ builder.Services.AddAuthentication(options =>
 
 .AddJwtBearer(options =>
 {
-    var key = builder.Configuration["Jwt:Key"];
+    var key = builder.Configuration["Jwt:Key"] ?? "";
     Console.WriteLine($"JWT Key Length: {key.Length}");
     Console.WriteLine($"JWT Key: {key}");
     if (key == null || key.Length < 16)

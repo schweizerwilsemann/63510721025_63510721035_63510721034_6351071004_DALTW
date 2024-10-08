@@ -87,12 +87,14 @@ namespace Apis.Controllers
 
         private string GenerateJwtToken(User user)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key")));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
