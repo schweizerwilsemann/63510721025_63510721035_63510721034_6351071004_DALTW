@@ -89,4 +89,45 @@ public class BooksController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+    
+    
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchBooks(
+        [FromQuery] string? searchTerm,
+        [FromQuery] string? sort = "desc",
+        [FromQuery] string? genre = null,
+        [FromQuery] int startIndex = 0,
+        [FromQuery] int limit = 6)
+    {
+        var filterBuilder = Builders<Book>.Filter;
+        var filters = filterBuilder.Empty;
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            filters &= filterBuilder.Or(
+                filterBuilder.Regex(b => b.Title, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
+                filterBuilder.Regex(b => b.Content, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i"))
+            );
+        }
+
+        if (!string.IsNullOrEmpty(genre) && genre != "none")
+        {
+            filters &= filterBuilder.Eq(b => b.Genre, genre);
+        }
+
+        var sortDefinition = sort == "asc"
+            ? Builders<Book>.Sort.Ascending(b => b.UpdatedAt)
+            : Builders<Book>.Sort.Descending(b => b.UpdatedAt);
+
+        var books = await _context.Books
+            .Find(filters)
+            .Sort(sortDefinition)
+            .Skip(startIndex)
+            .Limit(limit)
+            .ToListAsync();
+
+        var totalBooks = await _context.Books.CountDocumentsAsync(filters);
+
+        return Ok(new { books, totalBooks });
+    }
 }
