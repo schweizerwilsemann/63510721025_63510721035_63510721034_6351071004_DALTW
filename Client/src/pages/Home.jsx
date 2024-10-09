@@ -40,17 +40,19 @@ const Home = () => {
       <Banner />
 
       <div className="hot mx-4">
-        <h2 className="font-bold my-6 text-xl uppercase">Truyện Hot 🔥</h2>
+        <h2 className="font-bold my-6 text-xl uppercase">Hot Books 🔥</h2>
         <BookSlider books={books} />
       </div>
 
       <div className="new mx-4">
-        <h2 className="font-bold my-6 text-xl uppercase">Truyện Mới 💦</h2>
+        <h2 className="font-bold my-6 text-xl uppercase">New Books ⚡</h2>
         <BookSlider books={books} />
       </div>
 
       <div className="new mx-4">
-        <h2 className="font-bold my-6 text-xl uppercase">Khảo Sát 📝</h2>
+        <h2 className="font-bold my-6 text-xl uppercase">
+          Register to borrow books 📝
+        </h2>
         <ReaderForm />
         <br />
       </div>
