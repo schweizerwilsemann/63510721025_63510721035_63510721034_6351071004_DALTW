@@ -106,7 +106,8 @@ public class BooksController : ControllerBase
         {
             filters &= filterBuilder.Or(
                 filterBuilder.Regex(b => b.Title, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
-                filterBuilder.Regex(b => b.Content, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i"))
+                filterBuilder.Regex(b => b.Content, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i")),
+                filterBuilder.Regex(b => b.Author, new MongoDB.Bson.BsonRegularExpression(searchTerm, "i"))
             );
         }
 

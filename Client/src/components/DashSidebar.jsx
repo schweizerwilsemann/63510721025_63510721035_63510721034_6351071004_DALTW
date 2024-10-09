@@ -1,14 +1,16 @@
 import { Sidebar, Modal, Button } from "flowbite-react";
 import "react-circular-progressbar/dist/styles.css";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
 import React from "react";
 import {
   HiUser,
+  HiOutlineExclamationCircle,
   HiArrowSmRight,
   HiBookOpen,
   HiOutlineUserGroup,
   HiChartPie,
   HiAnnotation,
+  HiOutlineShoppingBag,
+  HiOutlineArchive,
 } from "react-icons/hi";
 import { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
@@ -110,6 +112,26 @@ export default function DashSidebar() {
                 as={Link}
               >
                 Comments
+              </Sidebar.Item>
+            )}
+            {currentUser.isAdmin && (
+              <Sidebar.Item
+                active={tab === "pending-books"}
+                icon={HiOutlineShoppingBag}
+                to="/dashboard?tab=pending-books"
+                as={Link}
+              >
+                Pending Books
+              </Sidebar.Item>
+            )}
+            {currentUser.isAdmin && (
+              <Sidebar.Item
+                active={tab === "books-history"}
+                icon={HiOutlineArchive}
+                to="/dashboard?tab=books-history"
+                as={Link}
+              >
+                Books History
               </Sidebar.Item>
             )}
             <Sidebar.Item

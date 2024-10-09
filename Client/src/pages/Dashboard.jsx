@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import DashProfile from "../components/DashProfile";
 import DashSidebar from "../components/DashSidebar";
+import { DashPendingBooks } from "../components/DashPendingBooks";
 import { DashUsers } from "../components/DashUsers";
+import { DashBooksHistory } from "../components/DashBooksHistory";
 
 export const Dashboard = () => {
   const location = useLocation();
@@ -23,6 +25,8 @@ export const Dashboard = () => {
       {/* profile, .... */}
       {tab === "profile" && <DashProfile />}
       {tab === "users" && <DashUsers />}
+      {tab === "pending-books" && <DashPendingBooks />}
+      {tab === "books-history" && <DashBooksHistory />}
     </div>
   );
 };

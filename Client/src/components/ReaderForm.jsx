@@ -1,22 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 const ReaderForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    favoriteBook: '',
-  })
+    name: "",
+    email: "",
+    favoriteBook: "",
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Form Data:', formData)
+    e.preventDefault();
+    console.log("Form Data:", formData);
     // You can send this data to your server or perform any action you need
-  }
+  };
 
   return (
     <div className="max-w-md mx-auto p-4 border rounded shadow">
@@ -78,8 +78,8 @@ const ReaderForm = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 // Exporting the ReaderForm component
-export default ReaderForm
+export default ReaderForm;

@@ -13,6 +13,7 @@ public class MongoDbContext
 
     public IMongoCollection<Book> Books => _database.GetCollection<Book>("Books");
     public IMongoCollection<User> Users => _database.GetCollection<User>("Users");
+    public IMongoCollection<BookSold> BookSold => _database.GetCollection<BookSold>("BookSold");
 
     public IMongoDatabase Database => _database;
 
