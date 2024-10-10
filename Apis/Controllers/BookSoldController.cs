@@ -35,6 +35,56 @@ public class BookSoldController : ControllerBase
         var booksSold = await _context.BookSold.Find(FilterDefinition<BookSold>.Empty).ToListAsync();
         return Ok(booksSold);
     }
+    
+    [HttpGet("user/books-in-progress")]
+    public async Task<IActionResult> GetBooksInProgress()
+    {
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return Forbid("You do not have permission to get books.");
+        }
+
+        var filter = Builders<BookSold>.Filter.And(
+            Builders<BookSold>.Filter.Eq(bs => bs.Username, currentUsername),
+            Builders<BookSold>.Filter.Or(
+                Builders<BookSold>.Filter.Eq(bs => bs.Status, "Pending"),
+                Builders<BookSold>.Filter.Eq(bs => bs.Status, "Approved")
+            )
+        );
+
+        var booksInProgress = await _context.BookSold.Find(filter).ToListAsync();
+
+        return Ok(booksInProgress);
+    }
+
+    [HttpGet("user/bought-books")]
+    public async Task<IActionResult> GetBoughtBooks()
+    {
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return Forbid("You do not have permission to get books.");
+        }
+
+        var filter = Builders<BookSold>.Filter.And(
+            Builders<BookSold>.Filter.Eq(bs => bs.Username, currentUsername),
+            Builders<BookSold>.Filter.Or(
+                Builders<BookSold>.Filter.Eq(bs => bs.Status, "Approved")
+            )
+        );
+
+        var boughtBooks = await _context.BookSold.Find(filter).ToListAsync();
+
+        return Ok(boughtBooks);
+    }
+    
     [HttpGet("pending")]
     public async Task<IActionResult> GetPendingBooksSold()
     {
@@ -53,18 +103,41 @@ public class BookSoldController : ControllerBase
         return Ok(pendingBooksSold);
     }
 
-    [HttpGet("{id:length(24)}", Name = "GetBookSoldById")]
-    public async Task<IActionResult> GetBookSoldById(string id)
+    [HttpGet("{bookId:length(24)}", Name = "GetBookSoldById")]
+    public async Task<IActionResult> GetBookSoldById(string bookId)
+    {
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+
+        if (user == null)
         {
-        var bookSold = await _context.BookSold.Find<BookSold>(book => book.Id == id).FirstOrDefaultAsync();
+            return Forbid("You do not have permission to access this book.");
+        }
+        var book = await _context.Books.Find(b => b.Id == bookId).FirstOrDefaultAsync();
+        if (book == null)
+        {
+            return NotFound("Book not found.");
+        }
+
+        // Kiểm tra xem sách đã được người dùng hiện tại mua hay chưa
+        var filter = Builders<BookSold>.Filter.And(
+            Builders<BookSold>.Filter.Eq(book => book.BookId, bookId),
+            Builders<BookSold>.Filter.Eq(book => book.Username, currentUsername)
+        );
+
+        var bookSold = await _context.BookSold.Find(filter).FirstOrDefaultAsync();
+
         if (bookSold == null)
         {
-            return NotFound();
+            return NotFound("Book not found or you do not have permission to access it.");
         }
 
         return Ok(bookSold);
     }
+
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateBookSold(BookSold newBookSold)
     {
         if (newBookSold == null)
@@ -98,7 +171,7 @@ public class BookSoldController : ControllerBase
 
         try
         {
-            newBookSold.UserId = user.Id; // Giả sử bạn có trường UserId trong model BookSold
+            newBookSold.UserId = user.Id; // Gán UserId từ người dùng hiện tại
             await _context.BookSold.InsertOneAsync(newBookSold);
             return CreatedAtAction(nameof(GetBookSoldById), new { id = newBookSold.Id }, newBookSold);
         }
@@ -107,6 +180,7 @@ public class BookSoldController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
 
     [HttpPut("{id:length(24)}/approve")]
     [Authorize]

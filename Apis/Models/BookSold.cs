@@ -26,7 +26,11 @@ namespace Apis.Models
 
         [BsonElement("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-        [BsonElement("photoURL")]
-        public string ?PhotoURL { get; set; }
+        [BsonElement("image")]
+        public string ?Image { get; set; }
+        [BsonElement("genre")]
+        public string ?Genre { get; set; }
+        [BsonElement("slug")]
+        public string ?Slug { get; set; }
     }
 }

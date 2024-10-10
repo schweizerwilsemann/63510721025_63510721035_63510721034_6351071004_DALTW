@@ -11,23 +11,43 @@ import {
   HiAnnotation,
   HiOutlineShoppingBag,
   HiOutlineArchive,
+  HiStatusOnline,
 } from "react-icons/hi";
 import { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/UserSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
+import NotificationBadge from "./NotificationBadge";
 export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
-
+  // Hàm lấy số lượng pending books
+  const fetchPendingBooksCount = async () => {
+    try {
+      if (currentUser.isAdmin) {
+        const response = await axios.get("/api/booksold/pending", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setPendingCount(response.data.length); // Giả sử response.data là mảng các sách pending
+      } else {
+      }
+    } catch (error) {
+      console.error("Error fetching pending books count:", error);
+    }
+  };
   useEffect(() => {
+    fetchPendingBooksCount();
     const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get("tab");
     if (!searchParams.has("tab")) {
@@ -94,6 +114,27 @@ export default function DashSidebar() {
                 Books
               </Sidebar.Item>
             )}
+            {!currentUser.isAdmin && (
+              <Sidebar.Item
+                active={tab === "books-in-progress"}
+                icon={HiStatusOnline}
+                to="/dashboard?tab=books-in-progress"
+                as={Link}
+              >
+                In progress
+              </Sidebar.Item>
+            )}
+            {!currentUser.isAdmin && (
+              <Sidebar.Item
+                active={tab === "user-bought-books"}
+                icon={HiBookOpen}
+                to="/dashboard?tab=user-bought-books"
+                as={Link}
+              >
+                Bought-Book
+              </Sidebar.Item>
+            )}
+
             {currentUser.isAdmin && (
               <Sidebar.Item
                 active={tab === "users"}
@@ -120,8 +161,10 @@ export default function DashSidebar() {
                 icon={HiOutlineShoppingBag}
                 to="/dashboard?tab=pending-books"
                 as={Link}
+                className="relative" // Để đảm bảo vị trí badge tương đối với phần tử này
               >
                 Pending Books
+                {pendingCount > 0 && <NotificationBadge count={pendingCount} />}
               </Sidebar.Item>
             )}
             {currentUser.isAdmin && (

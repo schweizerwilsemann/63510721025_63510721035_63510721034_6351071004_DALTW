@@ -38,7 +38,6 @@ export default function DashProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(">>>> check form data : ", formData);
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {

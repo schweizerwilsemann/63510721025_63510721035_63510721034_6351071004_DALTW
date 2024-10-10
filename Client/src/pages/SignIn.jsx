@@ -18,8 +18,6 @@ export default function SignIn() {
   const [isToastVisible, setIsToastVisible] = useState(false);
 
   const onFinish = async (values) => {
-    console.log(">>> check values: ", values);
-
     try {
       dispatch(signInStart());
       const response = await axios.post("/api/auth/login", values);

@@ -7,7 +7,7 @@ import axios from "axios";
 
 const { Column } = Table;
 
-export const DashBooksHistory = () => {
+export const DashBookInProgress = () => {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -17,7 +17,7 @@ export const DashBooksHistory = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get(`/api/booksold`, {
+      const response = await axios.get(`/api/booksold/user/books-in-progress`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

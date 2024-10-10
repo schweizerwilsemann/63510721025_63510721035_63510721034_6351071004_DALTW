@@ -117,7 +117,7 @@ export const DashUsers = () => {
             .toLowerCase()
             .includes(value.toLowerCase())
         : "",
-    onFilterDropdownVisibleChange: (visible) => {
+    onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
       }
@@ -148,7 +148,7 @@ export const DashUsers = () => {
 
   return (
     <div style={tableStyle}>
-      <Table dataSource={users} style={{ width: "100%" }}>
+      <Table dataSource={users} rowKey="id" style={{ width: "100%" }}>
         <Column
           title="Avatar"
           dataIndex="photoURL"

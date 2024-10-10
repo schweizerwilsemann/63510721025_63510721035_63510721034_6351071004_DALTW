@@ -4,24 +4,29 @@ import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 const { Column } = Table;
 
-export const DashPendingBooks = () => {
+export const DashPendingBooks = ({ setPendingCount }) => {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-
+  const { currentUser } = useSelector((state) => state.user);
   const searchInput = useRef(null);
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get(`/api/booksold/pending`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setBooks(response.data);
+      if (currentUser.isAdmin) {
+        const response = await axios.get(`/api/booksold/pending`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setBooks(response.data);
+      } else {
+        setError("You do not have permission to get pending book");
+      }
     } catch (error) {
       setError(error.message);
     }
@@ -29,7 +34,7 @@ export const DashPendingBooks = () => {
 
   useEffect(() => {
     fetchBooks();
-  }, []);
+  }, [setPendingCount]);
 
   const approveBook = async (id) => {
     try {
@@ -125,7 +130,7 @@ export const DashPendingBooks = () => {
             .toLowerCase()
             .includes(value.toLowerCase())
         : "",
-    onFilterDropdownVisibleChange: (visible) => {
+    onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.current?.select(), 100);
       }
@@ -156,7 +161,7 @@ export const DashPendingBooks = () => {
 
   return (
     <div style={tableStyle}>
-      <Table dataSource={books} style={{ width: "100%" }}>
+      <Table dataSource={books} rowKey={`id`} style={{ width: "100%" }}>
         <Column
           title="Time Stamp"
           dataIndex="createdAt"
