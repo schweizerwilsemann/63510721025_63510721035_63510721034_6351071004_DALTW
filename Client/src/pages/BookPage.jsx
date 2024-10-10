@@ -1,60 +1,60 @@
-import { Button, Spinner } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import BookCard from "../components/BookCard";
+import { Button, Spinner } from 'flowbite-react'
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import BookCard from '../components/BookCard'
 
 export default function BookPage() {
-  const { bookSlug } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [book, setBook] = useState(null);
-  const [recentBooks, setRecentBooks] = useState(null);
+  const { bookSlug } = useParams()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [book, setBook] = useState(null)
+  const [recentBooks, setRecentBooks] = useState(null)
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        setLoading(true);
-        const res = await fetch(`/api/books/search?slug=${bookSlug}`);
-        const data = await res.json();
+        setLoading(true)
+        const res = await fetch(`/api/books/search?slug=${bookSlug}`)
+        const data = await res.json()
         if (!res.ok) {
-          setError(true);
-          setLoading(false);
-          return;
+          setError(true)
+          setLoading(false)
+          return
         }
         if (res.ok) {
-          setBook(data.books[0]);
-          setLoading(false);
-          setError(false);
+          setBook(data.books[0])
+          setLoading(false)
+          setError(false)
         }
       } catch (error) {
-        setError(true);
-        setLoading(false);
+        setError(true)
+        setLoading(false)
       }
-    };
-    fetchBook();
-  }, [bookSlug]);
+    }
+    fetchBook()
+  }, [bookSlug])
 
   useEffect(() => {
     try {
       const fetchRecentBooks = async () => {
-        const res = await fetch(`/api/books/search?limit=3`);
-        const data = await res.json();
+        const res = await fetch(`/api/books/search?limit=3`)
+        const data = await res.json()
         if (res.ok) {
-          setRecentBooks(data.books);
+          setRecentBooks(data.books)
         }
-      };
-      fetchRecentBooks();
+      }
+      fetchRecentBooks()
     } catch (error) {
-      console.log(error.messaage);
+      console.log(error.messaage)
     }
-  }, []);
+  }, [])
 
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Spinner size="xl">loading . . .</Spinner>
       </div>
-    );
+    )
   }
 
   return (
@@ -78,7 +78,7 @@ export default function BookPage() {
       <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs ">
         <span>{book && new Date(book.createdAt).toLocaleDateString()}</span>
         <span className="italic">
-          {" "}
+          {' '}
           {book && (book.content.length / 1000).toFixed(0)} mins read
         </span>
       </div>
@@ -95,5 +95,5 @@ export default function BookPage() {
         </div>
       </div>
     </main>
-  );
+  )
 }

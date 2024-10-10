@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Comment = () => {
+  const [isFocused, setIsFocused] = useState(false)
+
   return (
     <div className="w-full p-2">
       <div className="flex">
@@ -11,16 +13,23 @@ const Comment = () => {
           className="mr-2"
         />
         <input
-          className="flex-grow p-2 border-b border-gray-300 border-transparent focus:outline-none focus:ring-0 focus:border-blue-500"
+          className="flex-grow p-2 border-b border-dark-500 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Type your comment here..."
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         ></input>
-        <button
-          className="ml-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
-          type="submit"
-        >
-          Comment
-        </button>
       </div>
+
+      {isFocused && (
+        <div className="flex justify-end my-3">
+          <button
+            className="ml-2 bg-blue-500 text-white py-1 round-sm px-3 hover:bg-blue-600 transition duration-200"
+            type="submit"
+          >
+            Comment
+          </button>
+        </div>
+      )}
 
       <div>
         <div class="flex items-center my-4">
