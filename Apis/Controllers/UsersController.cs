@@ -111,6 +111,8 @@ namespace Apis.Controllers
 
             return Ok(result); // Trả về đối tượng người dùng đã cập nhật
         }
+
+        
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> SoftDeleteUser(string id)
         {

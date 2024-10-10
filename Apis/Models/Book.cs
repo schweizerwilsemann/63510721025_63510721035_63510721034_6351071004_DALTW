@@ -19,6 +19,7 @@ namespace Apis.Models
         [BsonElement("published_year")]
         public int PublishedYear { get; set; }
 
+
         [BsonElement("genre")]
         public required string Genre { get; set; }
 

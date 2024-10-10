@@ -5,6 +5,8 @@ using Apis.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Unidecode.NET;
+using Apis.DTOs;
+using MongoDB.Bson;
 
 namespace Apis.Controllers;
 [ApiController]
@@ -48,6 +50,7 @@ public class BooksController : ControllerBase
     [Authorize]
     public async Task<IActionResult> PostBook(Book newBook)
     {
+
         var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
         
 
@@ -78,9 +81,10 @@ public class BooksController : ControllerBase
 
         newBook.Slug = slug;
         newBook.Username = currentUsername;
-
         try
         {
+            Console.WriteLine("Check object: " + newBook);
+
             await _context.Books.InsertOneAsync(newBook);
             return CreatedAtAction(nameof(GetBooks), new { id = newBook.Id }, newBook);
         }
@@ -131,4 +135,109 @@ public class BooksController : ControllerBase
 
         return Ok(new { books, totalBooks });
     }
+
+    [HttpPut("update/{id}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateBook(string id, [FromBody] UpdateBookDTO updateBookDTO)
+    {
+         var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+        
+
+        if (user == null || !user.IsAdmin)
+        {
+            return Forbid("You do not have permission to update this book.");
+        }
+        var filter = Builders<Book>.Filter.Eq("_id", new ObjectId(id));
+        var updateDefinition = new List<UpdateDefinition<Book>>();
+
+        if (!string.IsNullOrEmpty(updateBookDTO.Title))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Title, updateBookDTO.Title));
+        }
+
+        if (!string.IsNullOrEmpty(updateBookDTO.Author))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Author, updateBookDTO.Author));
+        }
+
+        if (updateBookDTO.PublishedYear.HasValue)
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.PublishedYear, updateBookDTO.PublishedYear.Value));
+        }
+
+        if (!string.IsNullOrEmpty(updateBookDTO.Genre))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Genre, updateBookDTO.Genre));
+        }
+
+        if (updateBookDTO.Price.HasValue)
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Price, updateBookDTO.Price.Value));
+        }
+
+        if (!string.IsNullOrEmpty(updateBookDTO.Content))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Content, updateBookDTO.Content));
+        }
+
+        if (!string.IsNullOrEmpty(updateBookDTO.Username))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Username, updateBookDTO.Username));
+        }
+
+        if (!string.IsNullOrEmpty(updateBookDTO.Image))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.Image, updateBookDTO.Image));
+        }
+
+        if (!string.IsNullOrEmpty(updateBookDTO.PdfUrl))
+        {
+            updateDefinition.Add(Builders<Book>.Update.Set(b => b.PdfUrl, updateBookDTO.PdfUrl));
+        }
+
+        if (!updateDefinition.Any())
+        {
+            return BadRequest("No fields to update");
+        }
+
+        var update = Builders<Book>.Update.Combine(updateDefinition);
+        var result = await _context.Books.FindOneAndUpdateAsync(filter, update, new FindOneAndUpdateOptions<Book>
+        {
+            ReturnDocument = ReturnDocument.After
+        });
+
+        if (result == null)
+        {
+            return NotFound("Book not found");
+        }
+
+        return Ok(result);
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> DeleteBook(string id)
+    {
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+        
+
+        if (user == null || !user.IsAdmin)
+        {
+            return Forbid("You do not have permission to delete this book.");
+        }
+        var filter = Builders<Book>.Filter.Eq("_id", new ObjectId(id));
+        var result = await _context.Books.DeleteOneAsync(filter);
+
+        if (result.DeletedCount == 0)
+        {
+            return NotFound("Book not found");
+        }
+
+        return Ok(new { message = "Book deleted successfully" });
+    }
+
+
 }

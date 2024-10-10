@@ -7,6 +7,7 @@ import { DashUsers } from "../components/DashUsers";
 import { DashBooksHistory } from "../components/DashBooksHistory";
 import { DashBookInProgress } from "../components/DashBookInProgress";
 import DashUserBoughtBooks from "../components/DashUserBoughtBooks";
+import { DashBooks } from "../components/DashBooks";
 
 export const Dashboard = () => {
   const location = useLocation();
@@ -34,6 +35,7 @@ export const Dashboard = () => {
       {tab === "books-history" && <DashBooksHistory />}
       {tab === "books-in-progress" && <DashBookInProgress />}
       {tab === "user-bought-books" && <DashUserBoughtBooks />}
+      {tab === "books" && <DashBooks />}
     </div>
   );
 };
