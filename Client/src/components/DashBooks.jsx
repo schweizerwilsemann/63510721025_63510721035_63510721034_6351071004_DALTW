@@ -1,60 +1,74 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Space, Table, Tag, Avatar, Input, Button } from "antd";
+import { Space, Table, Modal, Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import axios from "axios";
+import ModalUpdateBook from "./ModalUpdateBook";
+import { toast } from "react-toastify";
 
 const { Column } = Table;
 
-export const DashUsers = () => {
-  const [users, setUsers] = useState([]);
+export const DashBooks = () => {
+  const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const searchInput = useRef(null);
+  const { confirm } = Modal;
 
-  const fetchUsers = async () => {
+  const fetchBooks = async () => {
     try {
-      const response = await axios.get("/api/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setUsers(response.data);
+      const response = await axios.get("/api/books");
+      setBooks(response.data);
     } catch (error) {
       setError(error.message);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchBooks();
+  }, [isUpdateModalOpen]);
+  useEffect(() => {
+    fetchBooks();
+  }, [isDeleteModalOpen]);
 
-  const deactivateUser = async (id) => {
+  const deleteBook = async (id) => {
     try {
-      await axios.delete(`/api/users/delete/${id}`);
+      setIsDeleteModalOpen(true);
+      const response = await axios.delete(`/api/books/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (response.status === 201 || response.status === 200) {
+        setIsDeleteModalOpen(false);
+        toast.success("Book deleted successfully!");
+      }
       fetchUsers();
     } catch (error) {
       setError(error.message);
     }
   };
 
-  const activateUser = async (id) => {
-    try {
-      await axios.put(
-        `/api/users/activate/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      fetchUsers();
-    } catch (error) {
-      setError(error.message);
-    }
+  const showDeleteConfirm = (id) => {
+    confirm({
+      title: "Do you want to delete this book?",
+      content: "This action can not be undo.",
+      okText: "Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      centered: true,
+      onOk() {
+        deleteBook(id);
+      },
+      onCancel() {
+        toast.success("Cancel deletion");
+      },
+    });
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -146,59 +160,73 @@ export const DashUsers = () => {
     minWidth: "150px",
   };
 
+  const openUpdateModal = (book) => {
+    setSelectedBook(book);
+    setIsUpdateModalOpen(true);
+  };
+
   return (
     <div style={tableStyle}>
-      <Table dataSource={users} rowKey="id" style={{ width: "100%" }}>
-        <Column
-          title="Avatar"
-          dataIndex="photoURL"
-          key="photoURL"
-          render={(photoURL) => <Avatar src={photoURL} />}
-          style={columnStyle}
-        />
+      <Table dataSource={books} rowKey="id" style={{ width: "100%" }}>
         <Column title="ID" dataIndex="id" key="id" style={columnStyle} />
         <Column
-          title="Username"
-          dataIndex="username"
-          key="username"
+          title="Title"
+          dataIndex="title"
+          key="title"
           style={columnStyle}
-          {...getColumnSearchProps("username")}
+          {...getColumnSearchProps("title")}
         />
         <Column
-          title="Email"
-          dataIndex="email"
-          key="email"
+          title="Author"
+          dataIndex="author"
+          key="author"
           style={columnStyle}
-          {...getColumnSearchProps("email")}
+          {...getColumnSearchProps("author")}
         />
         <Column
-          title="Activate"
-          dataIndex="isActive"
-          key="isActive"
-          render={(isActive) => (isActive ? "✅" : "")}
+          title="Genre"
+          dataIndex="genre"
+          key="genre"
           style={columnStyle}
+          {...getColumnSearchProps("author")}
         />
         <Column
-          title="Admin"
-          dataIndex="isAdmin"
-          key="isAdmin"
-          render={(isAdmin) => (isAdmin ? "✅" : "")}
+          title="Published Year"
+          dataIndex="publishedYear"
+          key="publishedYear"
           style={columnStyle}
+          {...getColumnSearchProps("publishedYear")}
         />
         <Column
           title="Action"
           key="action"
           render={(_, record) => (
             <Space size="middle">
-              <Button onClick={() => activateUser(record.id)}>Activate</Button>
-              <Button onClick={() => deactivateUser(record.id)}>
-                Deactivate
+              <Button onClick={() => openUpdateModal(record)}>Update</Button>
+              <Button
+                type="primary"
+                shape="round"
+                onClick={() => showDeleteConfirm(record.id)}
+              >
+                Delete
               </Button>
             </Space>
           )}
           style={columnStyle}
         />
       </Table>
+      {isUpdateModalOpen && (
+        <ModalUpdateBook
+          open={isUpdateModalOpen} // Ensure this is correct
+          onCancel={() => {
+            setIsUpdateModalOpen(false);
+          }} // Handle modal close
+          onUpdate={() => {
+            setIsUpdateModalOpen(false); // Close modal after update
+          }}
+          book={selectedBook} // Make sure to pass the selected book
+        />
+      )}
     </div>
   );
 };

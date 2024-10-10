@@ -32,17 +32,17 @@ const Comment = () => {
       )}
 
       <div>
-        <div class="flex items-center my-4">
+        <div className="flex items-center my-4">
           <img
-            class="rounded-full mr-4"
+            className="rounded-full mr-4"
             src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
             alt="Avatar"
             width={40}
           />
 
           <div className="p-3">
-            <h2 class="text-lg font-semibold">John Doe</h2>
-            <p class="text-gray-600">
+            <h2 className="text-lg font-semibold">John Doe</h2>
+            <p className="text-gray-600">
               Oh no, it is amazing Lorem ipsum dolor sit amet consectetur
               adipisicing elit. Quidem voluptatibus voluptates labore amet
               dolorem, modi magnam doloribus praesentium accusantium illo qui

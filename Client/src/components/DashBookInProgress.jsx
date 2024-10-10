@@ -2,60 +2,35 @@ import React, { useRef, useEffect, useState } from "react";
 import { Space, Table, Tag, Avatar, Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import dayjs from "dayjs";
 import axios from "axios";
 
 const { Column } = Table;
 
-export const DashUsers = () => {
-  const [users, setUsers] = useState([]);
+export const DashBookInProgress = () => {
+  const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
 
   const searchInput = useRef(null);
 
-  const fetchUsers = async () => {
+  const fetchBooks = async () => {
     try {
-      const response = await axios.get("/api/users", {
+      const response = await axios.get(`/api/booksold/user/books-in-progress`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setUsers(response.data);
+      setBooks(response.data);
     } catch (error) {
       setError(error.message);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchBooks();
   }, []);
-
-  const deactivateUser = async (id) => {
-    try {
-      await axios.delete(`/api/users/delete/${id}`);
-      fetchUsers();
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const activateUser = async (id) => {
-    try {
-      await axios.put(
-        `/api/users/activate/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      fetchUsers();
-    } catch (error) {
-      setError(error.message);
-    }
-  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -148,15 +123,20 @@ export const DashUsers = () => {
 
   return (
     <div style={tableStyle}>
-      <Table dataSource={users} rowKey="id" style={{ width: "100%" }}>
+      <Table dataSource={books} rowKey={`id`} style={{ width: "100%" }}>
         <Column
-          title="Avatar"
-          dataIndex="photoURL"
-          key="photoURL"
-          render={(photoURL) => <Avatar src={photoURL} />}
+          title="Book's name"
+          dataIndex="title"
+          key="title"
+          style={columnStyle}
+          {...getColumnSearchProps("title")}
+        />
+        <Column
+          title="Price-($)"
+          dataIndex={`price`}
+          key="price"
           style={columnStyle}
         />
-        <Column title="ID" dataIndex="id" key="id" style={columnStyle} />
         <Column
           title="Username"
           dataIndex="username"
@@ -172,30 +152,36 @@ export const DashUsers = () => {
           {...getColumnSearchProps("email")}
         />
         <Column
-          title="Activate"
-          dataIndex="isActive"
-          key="isActive"
-          render={(isActive) => (isActive ? "✅" : "")}
+          title="Status"
+          dataIndex="status"
+          key="status"
           style={columnStyle}
+          render={(status) => {
+            let color;
+            if (status === "Approved") {
+              color = "rgb(9, 165, 77)";
+            } else if (status === "Rejected") {
+              color = "red"; // Màu đỏ
+            } else {
+              color = "rgb(51, 153, 255)"; // Màu đen cho các trạng thái khác
+            }
+            return (
+              <span className="font-semibold" style={{ color }}>
+                {status}
+              </span>
+            );
+          }}
         />
+
         <Column
-          title="Admin"
-          dataIndex="isAdmin"
-          key="isAdmin"
-          render={(isAdmin) => (isAdmin ? "✅" : "")}
-          style={columnStyle}
-        />
-        <Column
-          title="Action"
-          key="action"
-          render={(_, record) => (
-            <Space size="middle">
-              <Button onClick={() => activateUser(record.id)}>Activate</Button>
-              <Button onClick={() => deactivateUser(record.id)}>
-                Deactivate
-              </Button>
-            </Space>
-          )}
+          title="Time Stamp"
+          dataIndex="updatedAt"
+          key="updatedAt"
+          render={(updatedAt) => {
+            const dateObj = new Date(updatedAt);
+            const formattedDate = dayjs(dateObj).format("DD/MM/YYYY HH:mm:ss");
+            return formattedDate;
+          }}
           style={columnStyle}
         />
       </Table>

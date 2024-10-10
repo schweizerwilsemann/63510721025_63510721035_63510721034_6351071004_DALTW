@@ -1,13 +1,12 @@
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/navigation'
-import './styles.css'
-import BookCard from './BookCard'
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "./styles.css";
 
-import { Pagination, Navigation, Autoplay } from 'swiper/modules' // Import Autoplay module
+import { Pagination, Navigation, Autoplay } from "swiper/modules"; // Import Autoplay module
 
-import { Book } from '../components/Book'
+import { Book } from "../components/Book";
 
 export const BookSlider = ({ books }) => {
   return (
@@ -48,5 +47,5 @@ export const BookSlider = ({ books }) => {
         </SwiperSlide>
       ))}
     </Swiper>
-  )
-}
+  );
+};

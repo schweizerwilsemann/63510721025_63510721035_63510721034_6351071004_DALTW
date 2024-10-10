@@ -101,8 +101,8 @@ export const UploadBook = () => {
         setIsUploading(false);
       }
 
-      const post_infos = {
-        published_year: values.published_year.$y,
+      const book_infos = {
+        publishedYear: values.published_year.$y,
         username: username,
         image: imageUrl,
         pdfURL: pdfUrl,
@@ -113,7 +113,7 @@ export const UploadBook = () => {
         content: content,
       };
 
-      const response = await axios.post("/api/books", post_infos, {
+      const response = await axios.post("/api/books", book_infos, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
