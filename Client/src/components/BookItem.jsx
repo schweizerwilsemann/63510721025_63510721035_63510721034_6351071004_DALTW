@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import StarRating from "../components/StarRating";
 import "../styles/BookItem.css";
@@ -6,18 +6,70 @@ import { Modal, Button } from "flowbite-react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import QRCodeImage from "../assets/QRCode.jpg";
 import { useNavigate } from "react-router-dom";
 
 const BookItem = ({ book }) => {
-  console.log(">>>> check book info: ", book);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentBook, setCurrentBook] = useState({});
   const [isImageZoomed, setIsImageZoomed] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const rating = 4;
   const isSeeMore = book.content.split(" ").length > 150;
   const navigate = useNavigate();
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const { userId, username } = parseJwt(token);
+      setCurrentUserId(userId);
+    }
+
+    const fetchBookSold = async () => {
+      try {
+        const response = await axios.get(`/api/booksold/${book.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setCurrentBook(response.data);
+      } catch (error) {
+        console.error("Error fetching book sold data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookSold();
+  }, [book.id, currentUser]);
+
+  const parseJwt = (token) => {
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      const userId =
+        decoded[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ];
+      const username =
+        decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+      return { userId, username };
+    } catch (e) {
+      return null;
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!currentBook) {
+    return <div>Book not found!</div>;
+  }
+  const isApproved = currentBook.status === "Approved";
+  const isCurrentUserOwner = currentBook.userId === currentUserId;
 
   const handleSeeMore = () => {
     document.getElementById("see-more-btn").style.display = "none";
@@ -56,8 +108,8 @@ const BookItem = ({ book }) => {
         },
       });
 
-      if (response.status === 201) {
-        toast.success("You have bought this book!");
+      if (response.status === 201 || response.status === 200) {
+        toast.success(response.data);
         navigate("/");
       } else if (response.status === 400) {
         toast.error(response.data);
@@ -78,6 +130,9 @@ const BookItem = ({ book }) => {
 
   const toggleImageZoom = () => {
     setIsImageZoomed(!isImageZoomed);
+  };
+  const handleReadingBook = () => {
+    navigate(`/books/reading?book=${book.pdfUrl}`);
   };
 
   return (
@@ -129,17 +184,25 @@ const BookItem = ({ book }) => {
           )}
 
           <div className="text-center mt-2 p-3">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-1 rounded transition duration-200">
-              Read Book
-            </button>
-            <button
-              className="bg-red-500 hover:bg-red-600
+            {isApproved && isCurrentUserOwner ? (
+              <button
+                className="bg-blue-500 hover:bg-blue-600
+               text-white font-bold py-2 px-4 m-1 
+               rounded transition duration-200"
+                onClick={() => handleReadingBook()}
+              >
+                Read Book
+              </button>
+            ) : (
+              <button
+                className="bg-red-500 hover:bg-red-600
                                  text-white font-bold py-2 px-4 m-1
                                   rounded transition duration-200"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Buy Book
-            </button>
+                onClick={() => setIsModalOpen(true)}
+              >
+                Buy Book
+              </button>
+            )}
           </div>
         </div>
 

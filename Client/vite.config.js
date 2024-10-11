@@ -12,4 +12,7 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  mimeTypes: {
+    "application/javascript": ["mjs"],
+  },
 });

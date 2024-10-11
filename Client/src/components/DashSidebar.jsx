@@ -68,6 +68,7 @@ export default function DashSidebar() {
   const handleLogout = () => {
     try {
       setShowModal(false);
+      localStorage.removeItem("token");
       localStorage.removeItem("persist:root");
       dispatch(signOutSuccess());
       navigate("/");

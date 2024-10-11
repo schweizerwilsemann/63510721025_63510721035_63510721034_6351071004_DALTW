@@ -120,13 +120,14 @@ public class BookSoldController : ControllerBase
             return NotFound("Book not found.");
         }
 
-        // Kiểm tra xem sách đã được người dùng hiện tại mua hay chưa
         var filter = Builders<BookSold>.Filter.And(
             Builders<BookSold>.Filter.Eq(book => book.BookId, bookId),
             Builders<BookSold>.Filter.Eq(book => book.Username, currentUsername)
         );
 
-        var bookSold = await _context.BookSold.Find(filter).FirstOrDefaultAsync();
+        var bookSold = await _context.BookSold.Find(filter)
+        .Sort(Builders<BookSold>.Sort.Descending(book => book.UpdatedAt))
+        .FirstOrDefaultAsync();
 
         if (bookSold == null)
         {
@@ -171,15 +172,22 @@ public class BookSoldController : ControllerBase
 
         try
         {
-            newBookSold.UserId = user.Id; // Gán UserId từ người dùng hiện tại
+            // Gán UserId từ người dùng hiện tại và trạng thái là "Pending"
+            newBookSold.UserId = user.Id;
+            newBookSold.Status = "Pending"; // Đặt trạng thái là Pending để admin duyệt
+
+            // Ghi vào cơ sở dữ liệu
             await _context.BookSold.InsertOneAsync(newBookSold);
-            return CreatedAtAction(nameof(GetBookSoldById), new { id = newBookSold.Id }, newBookSold);
+
+            // Trả về thông báo thành công
+            return Ok("Your request has been submitted and is pending admin approval.");
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
 
 
     [HttpPut("{id:length(24)}/approve")]

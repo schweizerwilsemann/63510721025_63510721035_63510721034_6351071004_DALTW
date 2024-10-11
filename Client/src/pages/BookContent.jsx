@@ -1,19 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { Document, Page, pdfjs } from "react-pdf";
+import HTMLFlipBook from "react-pageflip";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs`;
 
 export const BookContent = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0); // Current page
-  const [totalPages, setTotalPages] = useState(0); // Total pages
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [currentBookPdfURL, setCurrentBookPdfURL] = useState("");
+  const [numPages, setNumPages] = useState(null);
+
+  const onDocumentLoadSuccess = (pdf) => {
+    setNumPages(pdf.numPages);
+  };
+
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    const pdfUrlFromQuery = currentUrl.split("book=")[1];
+    if (pdfUrlFromQuery) {
+      setCurrentBookPdfURL(pdfUrlFromQuery);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPdf = async () => {
+      if (!currentBookPdfURL) return;
       try {
-        const response = await fetch("URL_CUA_FILE_PDF");
+        const response = await fetch(currentBookPdfURL);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         const blob = await response.blob();
         const pdfUrl = URL.createObjectURL(blob);
         setPdfUrl(pdfUrl);
@@ -21,54 +38,25 @@ export const BookContent = () => {
         console.error("Error fetching PDF:", error);
       }
     };
+
     fetchPdf();
-  }, []);
-
-  const handleDocumentLoad = (pdf) => {
-    setTotalPages(pdf.numPages); // Update total pages
-  };
-
-  const goToPreviousPage = () => {
-    setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : prevPage));
-  };
-
-  const goToNextPage = () => {
-    setCurrentPage((prevPage) =>
-      prevPage < totalPages - 1 ? prevPage + 1 : prevPage
-    );
-  };
+  }, [currentBookPdfURL]);
 
   return (
-    <div>
+    <div className="flex justify-center items-center h-30rem  bg-gray-100">
       {pdfUrl ? (
-        <Worker
-          workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}
-        >
-          <Viewer
-            fileUrl={`https://firebasestorage.googleapis.com/v0/b/reading-book-web.appspot.com/o/pdfs%2F1728308133234Alice_in_Wonderland.pdf?alt=media&token=538190d0-8079-44d6-9aae-a3c397645492`}
-            plugins={[defaultLayoutPluginInstance]}
-            initialPage={currentPage}
-            onDocumentLoad={handleDocumentLoad}
-          />
-        </Worker>
+        <HTMLFlipBook width={600} height={800} className="shadow-lg">
+          {Array.from(new Array(numPages), (el, index) => (
+            <div key={`page_${index + 1}`} className="p-4">
+              <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                <Page pageNumber={index + 1} scale={1.5} />
+              </Document>
+            </div>
+          ))}
+        </HTMLFlipBook>
       ) : (
-        <div>Loading PDF...</div>
+        <div className="text-center text-gray-500">Loading PDF...</div>
       )}
-
-      <div>
-        <button onClick={goToPreviousPage} disabled={currentPage === 0}>
-          Previous
-        </button>
-        <span>
-          Page {currentPage + 1} of {totalPages}
-        </span>
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages - 1}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };

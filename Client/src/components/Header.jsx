@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Button,
@@ -6,56 +6,57 @@ import {
   TextInput,
   Dropdown,
   Modal,
-} from 'flowbite-react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AiOutlineSearch } from 'react-icons/ai'
-import { HiOutlineExclamationCircle } from 'react-icons/hi'
-import { FaMoon, FaSun } from 'react-icons/fa'
-import { useDispatch, useSelector } from 'react-redux'
+} from "flowbite-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AiOutlineSearch } from "react-icons/ai";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
-import { signOutSuccess } from '../redux/user/UserSlice.js'
+import { signOutSuccess } from "../redux/user/UserSlice.js";
 
 export default function Header() {
-  const path = useLocation().pathname
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { currentUser } = useSelector((state) => state.user)
-  const [showModal, setShowModal] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
+  const path = useLocation().pathname;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+  const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search)
-    console.log()
-    const searchTermFromUrl = urlParams.get('searchTerm')
+    const urlParams = new URLSearchParams(location.search);
+    console.log();
+    const searchTermFromUrl = urlParams.get("searchTerm");
     if (searchTermFromUrl) {
-      setSearchTerm(searchTermFromUrl)
+      setSearchTerm(searchTermFromUrl);
     }
-  }, [location.search])
+  }, [location.search]);
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    const urlParams = new URLSearchParams(location.search)
-    urlParams.set('searchTerm', searchTerm)
-    const searchQuery = urlParams.toString()
-    navigate(`/search?${searchQuery}`)
-  }
+    event.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
 
-  console.log('>>> check current user: ', currentUser)
+  console.log(">>> check current user: ", currentUser);
 
   const handleLogout = () => {
     try {
-      setShowModal(false)
-      localStorage.removeItem('persist:root')
-      dispatch(signOutSuccess())
-      navigate('/')
+      setShowModal(false);
+      localStorage.removeItem("token");
+      localStorage.removeItem("persist:root");
+      dispatch(signOutSuccess());
+      navigate("/");
     } catch (error) {
-      console.log('>>> Logout failed! ', error.message)
+      console.log(">>> Logout failed! ", error.message);
     }
-  }
+  };
   const handleConfirmLogout = () => {
-    handleLogout()
-    setShowModal(false)
-  }
+    handleLogout();
+    setShowModal(false);
+  };
   return (
     <>
       <Navbar className="border-b-2 ">
@@ -105,14 +106,14 @@ export default function Header() {
               <Dropdown.Header>
                 <span className=" block text-sm">
                   <span className="font-bold">Username:</span> &nbsp;
-                  {currentUser.username}{' '}
+                  {currentUser.username}{" "}
                 </span>
                 <span className=" block text-sm truncate">
                   <span className="font-bold">Email: </span> &nbsp;
-                  {currentUser.email}{' '}
+                  {currentUser.email}{" "}
                 </span>
               </Dropdown.Header>
-              <Link to={'/dashboard?tab=profile'}>
+              <Link to={"/dashboard?tab=profile"}>
                 <Dropdown.Item>Profile</Dropdown.Item>
               </Link>
               <Dropdown.Divider />
@@ -129,13 +130,13 @@ export default function Header() {
           <Navbar.Toggle className="text-white bg-orange-400 hover:bg-orange-500" />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link as={`div`} active={path === '/'}>
+          <Navbar.Link as={`div`} active={path === "/"}>
             <Link to="/">Home</Link>
           </Navbar.Link>
-          <Navbar.Link as={`div`} active={path === '/about'}>
+          <Navbar.Link as={`div`} active={path === "/about"}>
             <Link to="/about">About</Link>
           </Navbar.Link>
-          <Navbar.Link as={`div`} active={path === '/projects'}>
+          <Navbar.Link as={`div`} active={path === "/projects"}>
             <Link to="/projects">Projects</Link>
           </Navbar.Link>
         </Navbar.Collapse>
@@ -168,5 +169,5 @@ export default function Header() {
         </Modal.Body>
       </Modal>
     </>
-  )
+  );
 }
