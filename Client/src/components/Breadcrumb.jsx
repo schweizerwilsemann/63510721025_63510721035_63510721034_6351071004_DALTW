@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { FaHome } from 'react-icons/fa'
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 const Breadcrumb = ({ book, chapter = null }) => {
   return (
@@ -35,7 +35,7 @@ const Breadcrumb = ({ book, chapter = null }) => {
             <li aria-current="page">
               <div className="flex items-center">
                 <Link to="/" className="text-dark-600 hover:underline">
-                  {chapter}
+                  Page {chapter}
                 </Link>
               </div>
             </li>
@@ -43,7 +43,7 @@ const Breadcrumb = ({ book, chapter = null }) => {
         )}
       </ol>
     </nav>
-  )
-}
+  );
+};
 
-export default Breadcrumb
+export default Breadcrumb;

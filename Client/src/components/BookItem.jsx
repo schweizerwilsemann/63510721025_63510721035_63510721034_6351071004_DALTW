@@ -132,7 +132,7 @@ const BookItem = ({ book }) => {
     setIsImageZoomed(!isImageZoomed);
   };
   const handleReadingBook = () => {
-    navigate(`/books/reading?book=${book.pdfUrl}`);
+    navigate(`/books/reading?book=${book.slug}`);
   };
 
   return (

@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-import NotFound from './NotFound'
-import BookItem from '../components/BookItem'
-import Comment from '../components/Comment'
-import Breadcrumb from '../components/Breadcrumb'
+import NotFound from "./NotFound";
+import BookItem from "../components/BookItem";
+import Comment from "../components/Comment";
+import Breadcrumb from "../components/Breadcrumb";
 
 const BookDetail = () => {
-  const { slug } = useParams()
-  const [book, setBook] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const { slug } = useParams();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        setLoading(true)
-        const response = await fetch(`http://localhost:5173/api/books/${slug}`)
-        const data = await response.json()
-        setBook(data)
+        setLoading(true);
+        const response = await fetch(`http://localhost:5173/api/books/${slug}`);
+        const data = await response.json();
+        setBook(data);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchBook()
-  }, [slug])
+    fetchBook();
+  }, [slug]);
 
   if (loading) {
-    return <div className="container mx-auto">Loading...</div>
+    return <div className="container mx-auto">Loading...</div>;
   }
 
   if (!book) {
-    return <NotFound />
+    return <NotFound />;
   }
 
   return (
@@ -50,7 +50,7 @@ const BookDetail = () => {
 
       <Comment />
     </div>
-  )
-}
+  );
+};
 
-export default BookDetail
+export default BookDetail;
