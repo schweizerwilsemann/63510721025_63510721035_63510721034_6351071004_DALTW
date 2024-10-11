@@ -25,7 +25,6 @@ function App() {
       <ScrollToTop />
 
       <Header />
-      <Breadcrumb />
 
       <Routes>
         <Route path="/" element={<Home />} />

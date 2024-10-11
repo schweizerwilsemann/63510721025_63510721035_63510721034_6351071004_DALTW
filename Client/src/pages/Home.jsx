@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { BookSlider } from '../components/BookSlider'
 import { Banner } from '../components/Banner'
 import ReaderForm from '../components/ReaderForm'
+import JoinUs from '../components/JoinUs'
 
 const Home = () => {
   const [books, setBooks] = useState([])
@@ -49,10 +50,11 @@ const Home = () => {
         <BookSlider books={books} />
       </div>
 
-      <div className="new mx-4">
-        <h2 className="font-bold my-6 text-xl uppercase">
-          Register to borrow books 📝
-        </h2>
+      <div className="join-us m-4">
+        <JoinUs />
+      </div>
+
+      <div className="reader-form m-6">
         <ReaderForm />
         <br />
       </div>
