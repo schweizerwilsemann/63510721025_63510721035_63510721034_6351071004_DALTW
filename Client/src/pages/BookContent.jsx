@@ -17,19 +17,14 @@ export const BookContent = () => {
   const onDocumentLoadSuccess = (pdf) => {
     setNumPages(pdf.numPages);
   };
+  const currentUrl = window.location.href;
+  const slugFromQuery = currentUrl.split("book=")[1];
 
-  useEffect(() => {
-    const currentUrl = window.location.href;
-    const slugFromQuery = currentUrl.split("book=")[1];
-    if (slugFromQuery) {
-      setCurrentBookSlug(slugFromQuery);
-    }
-  }, []);
   useEffect(() => {
     const fetchBook = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/books/${currentBookSlug}`);
+        const response = await fetch(`/api/books/${slugFromQuery}`);
         const data = await response.json();
         setBook(data);
       } finally {
@@ -38,8 +33,8 @@ export const BookContent = () => {
     };
 
     fetchBook();
-  }, [currentBookSlug]);
-  console.log(">>>> check current book", book);
+  }, [slugFromQuery]);
+
   useEffect(() => {
     const fetchPdf = async () => {
       if (!book.pdfUrl) return;

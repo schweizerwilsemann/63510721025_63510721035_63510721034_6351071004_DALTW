@@ -1,5 +1,5 @@
-import React from 'react'
-import { BsFacebook, BsTwitter, BsInstagram, BsLinkedin } from 'react-icons/bs'
+import React from "react";
+import { BsFacebook, BsTwitter, BsInstagram, BsLinkedin } from "react-icons/bs";
 
 const JoinUs = () => {
   return (
@@ -17,7 +17,7 @@ const JoinUs = () => {
         </p>
 
         <div className="flex space-x-4 justify-center items-center py-6">
-          <button class="bg-blue-500 uppercase text-white py-2 px-4">
+          <button className="bg-blue-500 uppercase text-white py-2 px-4">
             join us
           </button>
 
@@ -55,7 +55,7 @@ const JoinUs = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default JoinUs
+export default JoinUs;
