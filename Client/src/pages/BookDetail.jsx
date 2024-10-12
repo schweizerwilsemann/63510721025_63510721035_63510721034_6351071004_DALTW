@@ -5,6 +5,7 @@ import NotFound from "./NotFound";
 import BookItem from "../components/BookItem";
 import Comment from "../components/Comment";
 import Breadcrumb from "../components/Breadcrumb";
+import CommentSection from "../components/CommentSection";
 
 const BookDetail = () => {
   const { slug } = useParams();
@@ -44,11 +45,15 @@ const BookDetail = () => {
 
       <BookItem book={book} />
 
-      <h2 className="text-xl font-bold text-gray-800 mb-4 mt-4 uppercase border-b-2 border-dark inline-block pb-2">
+      <h2
+        className="text-xl font-bold text-gray-800 
+                    mb-4 mt-7 uppercase border-b-2 border-dark 
+                    inline-block pb-2 ml-80"
+      >
         Comments
       </h2>
 
-      <Comment />
+      <CommentSection bookId={book.id} />
     </div>
   );
 };

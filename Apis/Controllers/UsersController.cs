@@ -66,6 +66,19 @@ namespace Apis.Controllers
 
             return Ok(user);
         }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserByUsername(string id)
+        {
+            var user = await _context.Users.Find(u => u.Id == id).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound( new {message = "User not found"});
+            }
+
+            return Ok(user);
+        }
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto updatedUser)
         {

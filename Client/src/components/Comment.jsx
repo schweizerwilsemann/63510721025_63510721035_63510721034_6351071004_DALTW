@@ -1,59 +1,162 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
+import moment from "moment";
+import { FaThumbsUp } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { Button, Textarea } from "flowbite-react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const Comment = () => {
-  const [isFocused, setIsFocused] = useState(false)
+export default function Comment({ comment, onLike, onEdit, onDelete }) {
+  const [user, setUser] = useState({});
+  const [isEditting, setIsEditting] = useState(false);
+  const [editedContent, setEditedContent] = useState(comment.content);
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(">>>> check props comment: ", comment);
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get(`/api/users/${comment.userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(">>> check response me: ", response);
+        if (response) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getUser();
+  }, [comment]);
+
+  const handleEdit = () => {
+    setIsEditting(true);
+    setEditedContent(comment.content);
+  };
+  const handleSave = async () => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+
+      if (editedContent.length < 10) {
+        return toast.warning("Comment must contain at least 10 characters!");
+      }
+
+      const response = await axios.put(
+        `/api/comments/${comment.id}`,
+        { editedContent },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response) {
+        setIsEditting(false);
+        onEdit(comment, editedContent);
+      }
+    } catch (error) {
+      console.log("Error saving comment:", error.message);
+    }
+  };
 
   return (
-    <div className="w-full p-2">
-      <div className="flex">
+    <div className="flex p-4 border-b dark:border-gray-600 text-sm">
+      <div className="flex-shrink-0 mr-3">
         <img
-          src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
-          alt="avt"
-          width={40}
-          className="mr-2"
+          className="w-10 h-10 rounded-full bg-gray-200"
+          src={user.photoURL}
+          alt={user.username}
         />
-        <input
-          className="flex-grow p-2 border-b border-dark-500 focus:outline-none focus:ring-0 focus:border-blue-500"
-          placeholder="Type your comment here..."
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-        ></input>
       </div>
-
-      {isFocused && (
-        <div className="flex justify-end my-3">
-          <button
-            className="ml-2 bg-blue-500 text-white py-1 round-sm px-3 hover:bg-blue-600 transition duration-200"
-            type="submit"
-          >
-            Comment
-          </button>
+      <div className="flex-1">
+        <div className="flex items-center mb-1 p-1">
+          <span className="font-bold mr-1 text-xs truncate">
+            {user ? `@${user.username}` : "anonymous user"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            {moment(comment.createdAt).fromNow()}
+          </span>
         </div>
-      )}
+        {isEditting ? (
+          <>
+            <Textarea
+              className="mb-2"
+              value={editedContent}
+              onChange={(event) => setEditedContent(event.target.value)}
+            />
+            <div className="flex justify-end gap-2 text-xs">
+              <Button
+                type="button"
+                size="sm"
+                gradientDuoTone="purpleToPink"
+                onClick={handleSave}
+              >
+                Save
+              </Button>
 
-      <div>
-        <div className="flex items-center my-4">
-          <img
-            className="rounded-full mr-4"
-            src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
-            alt="Avatar"
-            width={40}
-          />
-
-          <div className="p-3">
-            <h2 className="text-lg font-semibold">John Doe</h2>
-            <p className="text-gray-600">
-              Oh no, it is amazing Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Quidem voluptatibus voluptates labore amet
-              dolorem, modi magnam doloribus praesentium accusantium illo qui
-              voluptatem enim ipsam excepturi facilis. Magnam placeat laboriosam
-              reiciendis!
+              <Button
+                type="button"
+                size="sm"
+                gradientDuoTone="purpleToBlue"
+                outline
+                onClick={() => setIsEditting(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="text-gray-500 dark:text-green-300 mb-2">
+              {comment.content}
             </p>
-          </div>
-        </div>
+            <div className="flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
+              <button
+                className={`text-gray-400 hover:text-sky-300 ${
+                  currentUser &&
+                  comment.likes.includes(currentUser.id) &&
+                  "!text-sky-300"
+                } `}
+                type="button"
+                onClick={() => onLike(comment.id)}
+              >
+                <FaThumbsUp className="text sm " />
+              </button>
+              <p className="text-gray-400">
+                {comment.numberOfLikes > 0 &&
+                  comment.numberOfLikes +
+                    " " +
+                    (comment.numberOfLikes === 1 ? "Like" : "Likes")}
+              </p>
+              {currentUser &&
+                (currentUser.id === comment.userId || currentUser.isAdmin) && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleEdit}
+                      className="text-gray-400 hover:text-sky-300"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(comment.id)}
+                      className="text-gray-400 hover:text-rose-500"
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
+            </div>
+          </>
+        )}
       </div>
     </div>
-  )
+  );
 }
-
-export default Comment

@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 namespace Apis.Models;
-public class User
+public class StarsRating
 {
     [BsonId]  // Indicates that this is the primary key (_id in MongoDB)
     [BsonRepresentation(BsonType.ObjectId)]  // Converts ObjectId to string for easier handling
@@ -13,11 +13,16 @@ public class User
     [BsonElement("username")]  // Maps the property to the "username" field in MongoDB.
     public required string Username { get; set; }
 
-    [BsonElement("email")]
-    public required string Email { get; set; }
-
-    [BsonElement("password_hash")]
-    public required string PasswordHash { get; set; }
+    [BsonElement("slug")]
+    public string? Slug { get; set; }
+        
+    [BsonElement("image")]
+    public string? Image { get; set; }
+    
+    [BsonElement("genre")]
+    public required string Genre { get; set; }
+    [BsonElement("title")] 
+    public required string Title { get; set; }
 
     [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; }
@@ -25,9 +30,4 @@ public class User
     [BsonElement("is_active")]
     public bool IsActive { get; set; }
 
-    [BsonElement("is_admin")]
-    public bool IsAdmin { get; set; }=false;
-    
-    [BsonElement("photoURL")]
-    public string ?PhotoURL { get; set; }
 }
