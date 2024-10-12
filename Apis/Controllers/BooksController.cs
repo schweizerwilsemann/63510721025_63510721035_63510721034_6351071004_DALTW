@@ -26,7 +26,7 @@ public class BooksController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetBooks()
     {
-        var books = await _context.Books.Find(FilterDefinition<Book>.Empty).ToListAsync();
+        var books = await _context.Books.Find(FilterDefinition<Book>.Empty).SortByDescending(book => book.CreatedAt).ToListAsync();
         return Ok(books);
     }
 

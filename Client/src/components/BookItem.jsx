@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 const BookItem = ({ book }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBook, setCurrentBook] = useState({});
+  const [hotBooks, setHotBooks] = useState([]);
   const [isImageZoomed, setIsImageZoomed] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const rating = 4;
@@ -44,6 +45,20 @@ const BookItem = ({ book }) => {
 
     fetchBookSold();
   }, [book.id, currentUser]);
+
+  useEffect(() => {
+    const fetchHotBooks = async () => {
+      try {
+        const response = await axios.get(`/api/starsrating/hot-books`);
+        setHotBooks(response.data);
+      } catch (error) {
+        console.error("Error fetching book sold data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHotBooks();
+  }, []);
 
   const parseJwt = (token) => {
     try {
@@ -134,7 +149,7 @@ const BookItem = ({ book }) => {
   const handleReadingBook = () => {
     navigate(`/books/reading?book=${book.slug}`);
   };
-
+  console.log(">>> check hot books: ", hotBooks);
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-4">
@@ -167,7 +182,7 @@ const BookItem = ({ book }) => {
 
           <hr className="border-t-2 my-1" />
 
-          <StarRating rating={rating} />
+          <StarRating bookInfos={book} userId={currentUserId} />
 
           <div id="book-desc" className="text-base mt-2 text-limit">
             <ReactMarkdown>{book.content}</ReactMarkdown>
@@ -212,58 +227,40 @@ const BookItem = ({ book }) => {
           </h2>
 
           <ul>
-            <li className="mt-2">
-              <div className="flex items-center">
-                <div className="flex-none bg-red-500 border border-transparent rounded-full w-8 h-8 flex items-center justify-center">
-                  <p className="text-white bold">1</p>
+            {hotBooks.slice(0, 5).map((book, index) => (
+              <li key={index} className="mt-2">
+                <div className="flex items-center">
+                  <div
+                    className={`flex-none bg-${
+                      index === 0
+                        ? "red"
+                        : index === 1
+                        ? "green"
+                        : index === 2
+                        ? "blue"
+                        : index == 3
+                        ? "gray"
+                        : "white"
+                    }-500 border border-transparent rounded-full w-8 h-8 flex items-center justify-center`}
+                  >
+                    <p
+                      className={`text-${index === 3 ? "dark" : "white"} bold`}
+                    >
+                      {index + 1}
+                    </p>
+                  </div>
+                  <div className="flex-1 ml-3">
+                    <p className="text-lg">
+                      {book?.bookDetails?.title ?? "None"}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {book?.bookDetails?.genre ?? "None"}
+                    </p>
+                  </div>
                 </div>
-
-                <div className="flex-1 ml-3">
-                  <p className="text-lg">Tại hạ Cao Thăng</p>
-                  <p className="text-sm text-gray-500">Tiên hiệp, Kiếm hiệp</p>
-                </div>
-              </div>
-              <hr />
-            </li>
-            <li className="mt-2">
-              <div className="flex items-center">
-                <div className="flex-none bg-green-500 border border-transparent rounded-full w-8 h-8 flex items-center justify-center">
-                  <p className="text-white bold">2</p>
-                </div>
-
-                <div className="flex-1 ml-3">
-                  <p className="text-lg">Trồng cây trên Sao Hỏa</p>
-                  <p className="text-sm text-gray-500">Tiên hiệp, Sinh tồn</p>
-                </div>
-              </div>
-              <hr />
-            </li>
-            <li className="mt-2">
-              <div className="flex items-center">
-                <div className="flex-none bg-blue-500 border border-transparent rounded-full w-8 h-8 flex items-center justify-center">
-                  <p className="text-white bold">3</p>
-                </div>
-
-                <div className="flex-1 ml-3">
-                  <p className="text-lg">Vua tin tặc</p>
-                  <p className="text-sm text-gray-500">Phiêu lưu, Hài hước</p>
-                </div>
-              </div>
-              <hr />
-            </li>
-            <li className="mt-2">
-              <div className="flex items-center">
-                <div className="flex-none bg-white-500 border border-dark rounded-full w-8 h-8 flex items-center justify-center">
-                  <p className="text-dark bold">4</p>
-                </div>
-
-                <div className="flex-1 ml-3">
-                  <p className="text-lg">Ta có 7 viên đá</p>
-                  <p className="text-sm text-gray-500">Phiêu lưu, Hài hước</p>
-                </div>
-              </div>
-              <hr />
-            </li>
+                <hr />
+              </li>
+            ))}
           </ul>
         </div>
       </div>

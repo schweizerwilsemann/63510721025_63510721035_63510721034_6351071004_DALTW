@@ -21,7 +21,7 @@ public class StarsRatingController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateRating([FromBody] StarsRating rating)
+   public async Task<IActionResult> CreateRating([FromBody] StarsRating rating)
     {
         var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
 
@@ -29,27 +29,27 @@ public class StarsRatingController : ControllerBase
         
         if (user == null)
         {
-            return Forbid("You are not allowed to rate this book");
+            return Forbid("You need to log in to rate the books.");
         }
         if (rating == null)
         {
-            return BadRequest("Rating is null.");
+            return BadRequest(new { message = "Rating is null." });
         }
 
-        // Kiểm tra xem người dùng đã đánh giá cuốn sách này chưa
         var existingRating = await _context.StarsRatings
             .Find(r => r.BookId == rating.BookId && r.UserId == user.Id)
             .FirstOrDefaultAsync();
 
         if (existingRating != null)
         {
-            return BadRequest("You have already rated this book.");
+            return BadRequest(new { message = "You have already rated this book." });
         }
 
         rating.UserId = user.Id ?? "";
         await _context.StarsRatings.InsertOneAsync(rating);
         return CreatedAtAction(nameof(GetRatingById), new { id = rating.Id }, rating);
     }
+
 
 
         [HttpGet("{id:length(24)}", Name = "GetRatingById")]
@@ -150,5 +150,27 @@ public class StarsRatingController : ControllerBase
 
             return Ok(hotBooksWithDetails);
         }
+        
+        [HttpGet("book/{bookId:length(24)}")]
+        public async Task<IActionResult> GetBookRating(string bookId)
+        {
+            var bookRating = await _context.StarsRatings.Aggregate()
+                .Match(r => r.BookId == bookId) // Lọc theo BookId
+                .Group(r => r.BookId, g => new
+                {
+                    BookId = g.Key,
+                    AverageStars = g.Average(r => r.Stars), // Tính số sao trung bình
+                    TotalRatings = g.Count() // Đếm tổng số lượng đánh giá
+                })
+                .FirstOrDefaultAsync(); // Lấy kết quả đầu tiên hoặc null nếu không có đánh giá
+
+            if (bookRating == null)
+            {
+                return NotFound(new { Message = "No ratings found for this book." });
+            }
+
+            return Ok(bookRating);
+        }
+
     }
 
