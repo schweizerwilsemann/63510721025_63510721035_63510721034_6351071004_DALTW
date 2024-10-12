@@ -121,15 +121,6 @@ public class StarsRatingController : ControllerBase
         [HttpGet("hot-books")]
         public async Task<IActionResult> GetHotBooks()
         {
-            var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
-        
-            var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
-            
-
-            if (!user.IsAdmin || user == null)
-            {
-                return Forbid("You do not have permission to get all the books were sold.");
-            }
             var hotBooks = await _context.StarsRatings.Aggregate()
                 .Group(r => r.BookId, g => new BookRatingSummary
                 {
