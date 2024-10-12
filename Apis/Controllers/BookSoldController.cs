@@ -226,7 +226,7 @@ public class BookSoldController : ControllerBase
 
         if (user == null || !user.IsAdmin)
         {
-            return Forbid("You do not have permission to upload books.");
+            return Forbid("You do not have permission to reject this book.");
         }
         var filter = Builders<BookSold>.Filter.Eq(bs => bs.Id, id);
         var update = Builders<BookSold>.Update.Set(bs => bs.Status, "Rejected");

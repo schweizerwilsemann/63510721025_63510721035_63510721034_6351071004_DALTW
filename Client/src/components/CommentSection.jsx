@@ -16,8 +16,6 @@ export default function CommentSection({ bookId }) {
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
 
-  console.log(">>>> check comment submit: ", comment);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -85,7 +83,6 @@ export default function CommentSection({ bookId }) {
         const res = await fetch(`/api/comments/book/${bookId}`);
         if (res.ok) {
           const data = await res.json();
-          console.log(">>>> check get book's comments: ", data);
           setComments(data);
         }
       } catch (error) {
@@ -115,7 +112,6 @@ export default function CommentSection({ bookId }) {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(">>> check res: ", res);
       if (res) {
         setComments(comments.filter((comment) => comment.id !== commentId));
       }

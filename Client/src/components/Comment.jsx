@@ -11,7 +11,6 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
   const [isEditting, setIsEditting] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
   const { currentUser } = useSelector((state) => state.user);
-  console.log(">>>> check props comment: ", comment);
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -20,7 +19,6 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        console.log(">>> check response me: ", response);
         if (response) {
           setUser(response.data);
         }

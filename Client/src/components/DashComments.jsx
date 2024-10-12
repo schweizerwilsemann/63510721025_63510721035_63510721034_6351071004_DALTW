@@ -1,60 +1,65 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Space, Table, Tag, Avatar, Input, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Space, Table, Input, Button, Modal } from "antd";
+import { ExclamationCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import moment from "moment";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const { Column } = Table;
+const { confirm } = Modal;
 
-export const DashUsers = () => {
-  const [users, setUsers] = useState([]);
+export const DashComments = () => {
+  const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
 
   const searchInput = useRef(null);
 
-  const fetchUsers = async () => {
+  const fetchComments = async () => {
     try {
-      const response = await axios.get("/api/users", {
+      const response = await axios.get("/api/comments", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setUsers(response.data);
+      console.log(response.data);
+      setComments(response.data.comments);
     } catch (error) {
       setError(error.message);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchComments();
   }, []);
 
-  const deactivateUser = async (id) => {
-    try {
-      await axios.delete(`/api/users/delete/${id}`);
-      fetchUsers();
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const activateUser = async (id) => {
-    try {
-      await axios.put(
-        `/api/users/activate/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      fetchUsers();
-    } catch (error) {
-      setError(error.message);
-    }
+  const showDeleteConfirm = (commentId, fetchComments) => {
+    confirm({
+      centered: "true",
+      title: "Do you want to delete this comment?",
+      icon: <ExclamationCircleOutlined />,
+      content: "This action can not be undo!",
+      okText: "Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk() {
+        axios
+          .delete(`/api/comments/${commentId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then(() => {
+            fetchComments();
+          })
+          .catch((error) => {
+            toast.error("Fail to delete:", error);
+          });
+      },
+      onCancel() {},
+    });
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -148,41 +153,38 @@ export const DashUsers = () => {
 
   return (
     <div style={tableStyle}>
-      <Table dataSource={users} rowKey="id" style={{ width: "100%" }}>
+      <Table dataSource={comments} rowKey="id" style={{ width: "100%" }}>
         <Column
-          title="Avatar"
-          dataIndex="photoURL"
-          key="photoURL"
-          render={(photoURL) => <Avatar src={photoURL} />}
+          title="Comment ID"
+          dataIndex="id"
+          key="id"
           style={columnStyle}
-        />
-        <Column title="ID" dataIndex="id" key="id" style={columnStyle} />
-        <Column
-          title="Username"
-          dataIndex="username"
-          key="username"
-          style={columnStyle}
-          {...getColumnSearchProps("username")}
+          {...getColumnSearchProps("id")}
         />
         <Column
-          title="Email"
-          dataIndex="email"
-          key="email"
+          title="Comments"
+          dataIndex="content"
+          key="content"
           style={columnStyle}
-          {...getColumnSearchProps("email")}
+          {...getColumnSearchProps("content")}
         />
         <Column
-          title="Activate"
-          dataIndex="isActive"
-          key="isActive"
-          render={(isActive) => (isActive ? "✅" : "")}
+          title="ID User"
+          dataIndex="userId"
+          key="userId"
           style={columnStyle}
         />
         <Column
-          title="Admin"
-          dataIndex="isAdmin"
-          key="isAdmin"
-          render={(isAdmin) => (isAdmin ? "✅" : "")}
+          title="Likes"
+          dataIndex="numberOfLikes"
+          key="numberOfLikes"
+          style={columnStyle}
+        />
+        <Column
+          title="Time"
+          dataIndex="updatedAt"
+          key="updatedAt"
+          render={(text) => moment(text).format("DD/MM/YYYY HH:mm:ss")}
           style={columnStyle}
         />
         <Column
@@ -190,9 +192,11 @@ export const DashUsers = () => {
           key="action"
           render={(_, record) => (
             <Space size="middle">
-              <Button onClick={() => activateUser(record.id)}>Activate</Button>
-              <Button type="primary" onClick={() => deactivateUser(record.id)}>
-                Deactivate
+              <Button
+                type="primary"
+                onClick={() => showDeleteConfirm(record.id, fetchComments)}
+              >
+                Delete
               </Button>
             </Space>
           )}

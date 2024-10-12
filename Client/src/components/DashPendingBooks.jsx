@@ -207,7 +207,9 @@ export const DashPendingBooks = ({ setPendingCount }) => {
           render={(_, record) => (
             <Space size="middle">
               <Button onClick={() => approveBook(record.id)}>Approve</Button>
-              <Button onClick={() => rejectBook(record.id)}>Reject</Button>
+              <Button type="primary" onClick={() => rejectBook(record.id)}>
+                Reject
+              </Button>
             </Space>
           )}
           style={columnStyle}
