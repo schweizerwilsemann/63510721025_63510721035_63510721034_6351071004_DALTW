@@ -11,7 +11,6 @@ const Home = () => {
   const [hotBooks, setHotBooks] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  console.log(">>> check hot books: ", hotBooks);
   const fetchData = async () => {
     const response = await fetch("/api/books");
     const result = await response.json();

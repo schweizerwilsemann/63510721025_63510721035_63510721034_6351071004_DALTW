@@ -7,12 +7,14 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer, // Import ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Button } from "antd";
+import * as XLSX from "xlsx";
 
 export const UsersChart = () => {
   const [data, setData] = useState([]);
@@ -31,21 +33,30 @@ export const UsersChart = () => {
         const formattedData = response.data.map((user) => ({
           date: moment(user.createdAt).format("YYYY-MM-DD"),
           count: 1,
+          username: user.username || "Unknown",
+          email: user.email || "No email",
+          createdAt: moment(user.createdAt).format("YYYY-MM-DD"),
         }));
 
         const groupedData = formattedData.reduce((acc, user) => {
           const date = user.date;
           if (!acc[date]) {
-            acc[date] = 0;
+            acc[date] = { count: 0, users: [], emails: [], createdAts: [] };
           }
-          acc[date]++;
+          acc[date].count++;
+          acc[date].users.push(user.username);
+          acc[date].emails.push(user.email);
+          acc[date].createdAts.push(user.createdAt);
           return acc;
         }, {});
 
         const sortedData = Object.keys(groupedData)
           .map((date) => ({
             date,
-            count: groupedData[date],
+            count: groupedData[date].count,
+            users: groupedData[date].users.join(", "),
+            emails: groupedData[date].emails.join(", "),
+            createdAts: groupedData[date].createdAts.join(", "),
           }))
           .sort((a, b) => moment(a.date).valueOf() - moment(b.date).valueOf());
 
@@ -70,6 +81,13 @@ export const UsersChart = () => {
       (!endDate || itemDate.isSameOrBefore(endDate))
     );
   });
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users Data");
+    XLSX.writeFile(workbook, "UsersData.xlsx");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen p-4">
@@ -106,6 +124,22 @@ export const UsersChart = () => {
           />
         </LineChart>
       </ResponsiveContainer>
+      <Button
+        className="bg-orange-400 text-sky-50"
+        style={{
+          width: "20rem",
+          height: "45px",
+          fontSize: "16px",
+        }}
+        block
+        type=""
+        htmlType="submit"
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#FFFF")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f97")}
+        onClick={exportToExcel}
+      >
+        Export Excel
+      </Button>
     </div>
   );
 };

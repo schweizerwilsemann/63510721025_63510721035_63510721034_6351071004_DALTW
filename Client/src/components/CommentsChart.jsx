@@ -29,13 +29,9 @@ export const CommentsChart = () => {
           },
         });
 
-        console.log("API Response:", response.data);
-
         const formattedData = response.data.comments.map((comment) => ({
           date: moment(comment.updatedAt).format("YYYY-MM-DD HH:mm"),
         }));
-
-        console.log("Formatted Data:", formattedData);
 
         const groupedData = formattedData.reduce((acc, comment) => {
           const date = comment.date;
@@ -52,8 +48,6 @@ export const CommentsChart = () => {
             count: groupedData[date],
           }))
           .sort((a, b) => moment(a.date).valueOf() - moment(b.date).valueOf());
-
-        console.log("Chart Data:", chartData);
 
         setData(chartData);
 
@@ -77,8 +71,6 @@ export const CommentsChart = () => {
       (!endDate || itemDate.isSameOrBefore(endDate))
     );
   });
-
-  console.log("Filtered Data:", filteredData);
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen p-4">

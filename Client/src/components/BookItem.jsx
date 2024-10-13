@@ -149,7 +149,6 @@ const BookItem = ({ book }) => {
   const handleReadingBook = () => {
     navigate(`/books/reading?book=${book.slug}`);
   };
-  console.log(">>> check hot books: ", hotBooks);
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-4">

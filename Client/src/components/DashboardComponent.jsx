@@ -58,7 +58,6 @@ export default function DashboardComponent() {
             dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
           },
         });
-        console.log(">>>> response books : ", response.data);
         if (response.data) {
           setBooks(response.data.books);
           setTotalBooks(response.data.totalSoldBooks);

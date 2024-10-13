@@ -13,9 +13,12 @@ import axios from "axios";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import * as XLSX from "xlsx";
+import { Button } from "antd";
 
 const BooksSoldChart = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); // Data đã qua filter
+  const [originalData, setOriginalData] = useState([]); // Dữ liệu gốc
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -29,13 +32,19 @@ const BooksSoldChart = () => {
         });
 
         const formattedData = response.data.map((book) => ({
-          date: moment(book.createdAt).format("YYYY-MM-DD HH:mm"),
+          title: book.title,
+          author: book.username,
+          email: book.email,
+          createdAt: moment(book.createdAt).format("YYYY-MM-DD HH:mm"),
           status: book.status,
+          genre: book.genre,
+          price: book.price,
         }));
 
-        // Lọc dữ liệu theo startDate và endDate
+        setOriginalData(formattedData); // Lưu dữ liệu gốc vào state
+
         const filteredData = formattedData.filter((book) => {
-          const bookDate = moment(book.date).toDate();
+          const bookDate = moment(book.createdAt).toDate();
           return (
             (!startDate || bookDate >= startDate) &&
             (!endDate || bookDate <= endDate)
@@ -43,7 +52,7 @@ const BooksSoldChart = () => {
         });
 
         const groupedData = filteredData.reduce((acc, book) => {
-          const date = book.date;
+          const date = book.createdAt;
           if (!acc[date]) {
             acc[date] = { Rejected: 0, Approved: 0, Pending: 0 };
           }
@@ -62,7 +71,6 @@ const BooksSoldChart = () => {
 
         setData(chartData);
 
-        // Thiết lập giá trị mặc định cho startDate và endDate nếu chưa có
         if (chartData.length > 0 && (!startDate || !endDate)) {
           setStartDate(moment(chartData[0].date).toDate());
           setEndDate(moment(chartData[chartData.length - 1].date).toDate());
@@ -72,9 +80,37 @@ const BooksSoldChart = () => {
       }
     };
 
-    // Gọi fetchData khi startDate hoặc endDate thay đổi
     fetchData();
   }, [startDate, endDate]);
+
+  const exportToExcel = () => {
+    const filteredDataForExport = originalData.filter((book) => {
+      const bookDate = moment(book.createdAt).toDate();
+      return (
+        (!startDate || bookDate >= startDate) &&
+        (!endDate || bookDate <= endDate)
+      );
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(
+      filteredDataForExport.map(
+        ({ title, author, email, createdAt, genre, price, status }) => ({
+          Title: title,
+          Author: author,
+          Email: email,
+          "Uploaded Date": createdAt,
+          Genre: genre,
+          Price: price,
+          Status: status,
+        })
+      )
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Books Data");
+
+    XLSX.writeFile(workbook, "BooksData.xlsx");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen p-4">
@@ -96,7 +132,7 @@ const BooksSoldChart = () => {
           />
         </div>
       </div>
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={500}>
         <LineChart
           width={1000}
           height={500}
@@ -113,6 +149,13 @@ const BooksSoldChart = () => {
           <Line type="monotone" dataKey="Pending" stroke="#0000ff" />
         </LineChart>
       </ResponsiveContainer>
+      <Button
+        className="bg-orange-400 text-white mt-4"
+        style={{ width: "20rem", height: "45px", fontSize: "16px" }}
+        onClick={exportToExcel}
+      >
+        Export to Excel
+      </Button>
     </div>
   );
 };
