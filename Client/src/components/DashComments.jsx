@@ -179,6 +179,7 @@ export const DashComments = () => {
           dataIndex="numberOfLikes"
           key="numberOfLikes"
           style={columnStyle}
+          sorter={(a, b) => a.numberOfLikes - b.numberOfLikes}
         />
         <Column
           title="Time"

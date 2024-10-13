@@ -185,6 +185,7 @@ export const DashPendingBooks = ({ setPendingCount }) => {
           dataIndex={`price`}
           key="price"
           style={columnStyle}
+          sorter={(a, b) => a.price - b.price}
         />
         <Column
           title="Username"
