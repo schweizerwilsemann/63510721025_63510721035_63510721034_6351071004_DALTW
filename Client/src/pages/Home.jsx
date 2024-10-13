@@ -13,7 +13,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   console.log(">>> check hot books: ", hotBooks);
   const fetchData = async () => {
-    const response = await fetch("http://localhost:5173/api/books");
+    const response = await fetch("/api/books");
     const result = await response.json();
 
     setBooks(result);

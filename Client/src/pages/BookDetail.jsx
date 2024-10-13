@@ -16,7 +16,7 @@ const BookDetail = () => {
     const fetchBook = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5173/api/books/${slug}`);
+        const response = await fetch(`/api/books/${slug}`);
         const data = await response.json();
         setBook(data);
       } finally {
