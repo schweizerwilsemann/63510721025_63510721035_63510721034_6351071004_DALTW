@@ -20,7 +20,7 @@ public class User
     public required string PasswordHash { get; set; }
 
     [BsonElement("created_at")]
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [BsonElement("is_active")]
     public bool IsActive { get; set; }

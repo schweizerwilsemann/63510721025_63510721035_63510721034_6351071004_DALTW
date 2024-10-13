@@ -52,6 +52,43 @@ namespace Apis.Controllers
             return Ok(users);
         }
 
+        [HttpGet("statistic")]
+        [Authorize]
+        public async Task<IActionResult> GetUsers(string sort = "asc", int startIndex = 0, int limit = 10)
+        {
+            var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+            
+            var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+            
+            if (user == null || !user.IsAdmin)
+            {
+                return Forbid("You do not have permission to view the list of users.");
+            }
+
+            var sortDirection = sort == "desc" ? -1 : 1;
+
+            var users = await _context.Users
+                .Find(_ => true) 
+                .Sort(sortDirection == 1 ? Builders<User>.Sort.Ascending(u => u.CreatedAt) : Builders<User>.Sort.Descending(u => u.CreatedAt))
+                .Skip(startIndex) 
+                .Limit(limit) 
+                .ToListAsync();
+
+            
+            var totalUsers = await _context.Users.CountDocumentsAsync(_ => true);
+
+            var now = DateTime.UtcNow;
+            var oneMonthAgo = now.AddMonths(-1);
+            var lastMonthUsers = await _context.Users.CountDocumentsAsync(u => u.CreatedAt >= oneMonthAgo);
+
+            return Ok(new
+            {
+                totalUsers,
+                lastMonthUsers,
+                users
+            });
+        }
+
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()

@@ -85,6 +85,50 @@ public class BookSoldController : ControllerBase
         return Ok(boughtBooks);
     }
     
+    [HttpGet("sold-books")]
+    [Authorize]
+    public async Task<IActionResult> GetSoldBooks(string sort = "asc", int startIndex = 0, int limit = 10)
+    {
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
+        // Find the current user
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+        
+        // Check if the user is not admin or user is null
+        if (user == null || !user.IsAdmin)
+        {
+            return Forbid("You do not have permission to view the books that were sold.");
+        }
+        
+        // Sorting direction (ascending or descending based on the input parameter)
+        var sortDirection = sort == "desc" ? -1 : 1;
+        
+        // Query to get books that were sold (assuming there's a status or similar indicator for sold books)
+        var books = await _context.BookSold
+            .Find(b => b.Status == "Sold") // Assuming "Sold" is the status of books that were sold
+            .Sort(sortDirection == 1 ? Builders<BookSold>.Sort.Ascending(b => b.CreatedAt) : Builders<BookSold>.Sort.Descending(b => b.CreatedAt))
+            .Skip(startIndex)
+            .Limit(limit)
+            .ToListAsync();
+
+        // Count total books with status "Sold"
+        var totalSoldBooks = await _context.BookSold.CountDocumentsAsync(b => b.Status == "Approved");
+
+        // Get the books sold in the last month
+        var now = DateTime.UtcNow;
+        var oneMonthAgo = now.AddMonths(-1);
+        var lastMonthSoldBooks = await _context.BookSold.CountDocumentsAsync(b => b.Status == "Approved" && b.CreatedAt >= oneMonthAgo);
+
+        // Prepare the response
+        return Ok(new
+        {
+            totalSoldBooks,
+            lastMonthSoldBooks,
+            books
+        });
+    }
+
+    
     [HttpGet("pending")]
     public async Task<IActionResult> GetPendingBooksSold()
     {
