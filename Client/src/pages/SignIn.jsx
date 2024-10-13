@@ -10,6 +10,7 @@ import {
   signInFailure,
 } from "../redux/user/UserSlice";
 import { toast } from "react-toastify";
+import OAuth from "../components/Oauth";
 
 export default function SignIn() {
   const [error, setError] = useState("");
@@ -100,7 +101,15 @@ export default function SignIn() {
                   },
                 ]}
               >
-                <Input prefix={<UserOutlined />} placeholder="Username" />
+                <Input
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
+                  prefix={<UserOutlined />}
+                  placeholder="Username"
+                />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -112,6 +121,11 @@ export default function SignIn() {
                 ]}
               >
                 <Input
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
                   prefix={<LockOutlined />}
                   type="password"
                   placeholder="Password"
@@ -129,7 +143,11 @@ export default function SignIn() {
               <Form.Item>
                 <Button
                   className="bg-orange-400 text-sky-50"
-                  style={{}}
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
                   block
                   type=""
                   htmlType="submit"
@@ -142,6 +160,7 @@ export default function SignIn() {
                 >
                   Log in
                 </Button>
+                <OAuth />
                 or{" "}
                 <Link className="font-semibold text-rose-400" to={"/sign-up"}>
                   Register now!

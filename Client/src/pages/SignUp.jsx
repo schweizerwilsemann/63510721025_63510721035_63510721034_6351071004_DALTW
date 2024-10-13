@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Flex } from "antd";
 import axios from "axios";
+import OAuth from "../components/Oauth";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -54,7 +55,15 @@ export default function SignIn() {
                   },
                 ]}
               >
-                <Input prefix={<MailOutlined />} placeholder="Email" />
+                <Input
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
+                  prefix={<MailOutlined />}
+                  placeholder="Email"
+                />
               </Form.Item>
               <Form.Item
                 name="username"
@@ -65,7 +74,15 @@ export default function SignIn() {
                   },
                 ]}
               >
-                <Input prefix={<UserOutlined />} placeholder="Username" />
+                <Input
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
+                  prefix={<UserOutlined />}
+                  placeholder="Username"
+                />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -78,6 +95,11 @@ export default function SignIn() {
                 hasFeedback
               >
                 <Input.Password
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
                   prefix={<LockOutlined />}
                   placeholder="Password"
                 />
@@ -107,6 +129,11 @@ export default function SignIn() {
                 ]}
               >
                 <Input.Password
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
                   prefix={<LockOutlined />}
                   placeholder="Confirm Password"
                 />
@@ -115,7 +142,11 @@ export default function SignIn() {
               <Form.Item>
                 <Button
                   className="bg-orange-400 text-sky-50"
-                  style={{}}
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
+                  }}
                   block
                   type=""
                   htmlType="submit"
@@ -128,6 +159,7 @@ export default function SignIn() {
                 >
                   Register
                 </Button>
+                <OAuth />
                 Already have an account?{" "}
                 <Link className="font-semibold text-rose-400" to={"/sign-in"}>
                   Login!

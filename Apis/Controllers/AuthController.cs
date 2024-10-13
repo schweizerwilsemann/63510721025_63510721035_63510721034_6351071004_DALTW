@@ -15,7 +15,11 @@ namespace Apis.Controllers
     {
         private readonly MongoDbContext _context;
         private readonly IConfiguration _configuration;
-
+        private string GenerateRandomPassword()
+        {
+            // Tạo mật khẩu ngẫu nhiên gồm 16 ký tự
+            return Guid.NewGuid().ToString("N").Substring(0, 8) + Guid.NewGuid().ToString("N").Substring(0, 8);
+        }
         public AuthController(MongoDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -109,6 +113,40 @@ namespace Apis.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            var user = await _context.Users.Find(u => u.Email == request.Email).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                var token = GenerateJwtToken(user);
+                return Ok(new { token, user });
+            }
+            else
+            {
+                // Tạo mật khẩu ngẫu nhiên
+                var generatedPassword = GenerateRandomPassword();
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(generatedPassword);
+
+                // Tạo tên người dùng từ tên và số ngẫu nhiên
+                var username = request.Name.ToLower().Replace(" ", "") + new Random().Next(1000, 9999);
+
+                // Tạo người dùng mới
+                var newUser = new User
+                {
+                    Username = username,
+                    Email = request.Email,
+                    PasswordHash = hashedPassword,
+                    PhotoURL = request.GooglePhotoURL,
+                    IsActive = true
+                };
+
+                await _context.Users.InsertOneAsync(newUser);
+                var token = GenerateJwtToken(newUser);
+
+                return Ok(new { token, user = newUser });
+            }
+        }
     }
 
     public class SignUpRequest
@@ -123,5 +161,12 @@ namespace Apis.Controllers
     {
         public string? Username { get; set; }
         public string? Password { get; set; }
+    }
+
+    public class GoogleLoginRequest
+    {
+        public required string Email { get; set; }
+        public required string Name { get; set; }
+        public required string GooglePhotoURL { get; set; }
     }
 }

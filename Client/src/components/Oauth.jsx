@@ -19,7 +19,7 @@ export default function OAuth() {
     });
     try {
       const resultsFromGoogle = await signInWithPopup(auth, provider);
-      const res = await fetch("/api/auth/google", {
+      const res = await fetch("/api/auth/google-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -30,7 +30,8 @@ export default function OAuth() {
       });
       const data = await res.json();
       if (res.ok) {
-        dispatch(signInSuccess(data));
+        localStorage.setItem("token", data.token);
+        dispatch(signInSuccess(data.user));
         navigate("/");
       }
     } catch (error) {
@@ -39,6 +40,7 @@ export default function OAuth() {
   };
   return (
     <Button
+      className="w-full items-center justify-center mt-2"
       type="button"
       gradientDuoTone="pinkToOrange"
       outline
