@@ -56,6 +56,7 @@ export default function SignIn() {
                 ]}
               >
                 <Input
+                  type="email"
                   style={{
                     width: "100%",
                     height: "45px",

@@ -29,5 +29,5 @@ public class User
     public bool IsAdmin { get; set; }=false;
     
     [BsonElement("photoURL")]
-    public string ?PhotoURL { get; set; }
+    public string ?PhotoURL { get; set; } = "https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg";
 }
