@@ -2,7 +2,6 @@ using MongoDB.Driver;
 using Apis.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Unidecode.NET;
 using Microsoft.AspNetCore.Mvc;
 using Apis.DTOs;
 
@@ -144,9 +143,9 @@ public class CommentsController : ControllerBase
         var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
         
 
-        if (user.IsAdmin && user == null)
+        if ( user == null || !user.IsAdmin)
         {
-            return Forbid("You do not have permission to get all the books were sold.");
+            return Forbid("You do not have permission to get all comments.");
         }
         var sortDirection = sort == "desc" ? -1 : 1;
         var comments = await _context.Comment
