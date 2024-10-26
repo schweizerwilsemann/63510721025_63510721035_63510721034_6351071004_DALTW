@@ -88,5 +88,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGet("/", () => "Hello World!");
-
-app.Run();
+if(app.Environment.IsDevelopment()){
+    app.Run();
+}
+else{
+    app.Run("http://0.0.0.0:5000");
+}
