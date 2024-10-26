@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["https://books-webapplication-plh6.onrender.com"],
+    "origin": ["https://reading-books-2010.vercel.app"],
     "method": ["GET", "POST", "PUT"],
     "maxAgeSeconds": 3600,
     "responseHeader": ["Content-Type", "Authorization"]
