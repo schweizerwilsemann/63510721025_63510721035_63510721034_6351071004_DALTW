@@ -20,11 +20,15 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowRenderFrontend",
         policy =>
         {
-            policy.WithOrigins("https://books-webapplication-plh6.onrender.com") // Thay bằng URL của frontend trên Render
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
+            policy.WithOrigins(
+                "https://books-webapplication-plh6.onrender.com", // Render frontend
+                "http://localhost:5173" // Local development frontend
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
         });
 });
+
 builder.Services.AddSingleton(new MongoDbContext(mongoConnectionString, databaseName));
 builder.Services.AddControllers();
 builder.Services.AddSession();
@@ -75,6 +79,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+
+app.UseCors("AllowRenderFrontend");
 
 app.UseHttpsRedirection();
 app.UseSession(); 
