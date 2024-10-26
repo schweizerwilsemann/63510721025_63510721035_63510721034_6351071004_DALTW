@@ -14,13 +14,18 @@ export const DashComments = () => {
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
 
   const searchInput = useRef(null);
 
-  const fetchComments = async () => {
+  const fetchComments = async (page = 1, pageSize = 10) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/comments`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/comments?startIndex=${
+          (page - 1) * pageSize
+        }&limit=${pageSize}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -29,21 +34,22 @@ export const DashComments = () => {
       );
       console.log(response.data);
       setComments(response.data.comments);
+      setTotal(response.data.totalComments); // Assuming API returns total count of comments
     } catch (error) {
       setError(error.message);
     }
   };
 
   useEffect(() => {
-    fetchComments();
-  }, []);
+    fetchComments(current, pageSize);
+  }, [current, pageSize]);
 
-  const showDeleteConfirm = (commentId, fetchComments) => {
+  const showDeleteConfirm = (commentId) => {
     confirm({
       centered: "true",
       title: "Do you want to delete this comment?",
       icon: <ExclamationCircleOutlined />,
-      content: "This action can not be undo!",
+      content: "This action cannot be undone!",
       okText: "Delete",
       okType: "danger",
       cancelText: "Cancel",
@@ -58,13 +64,12 @@ export const DashComments = () => {
             }
           )
           .then(() => {
-            fetchComments();
+            fetchComments(current, pageSize); // Refetch comments after delete
           })
           .catch((error) => {
             toast.error("Fail to delete:", error);
           });
       },
-      onCancel() {},
     });
   };
 
@@ -88,7 +93,6 @@ export const DashComments = () => {
     }) => (
       <div style={{ padding: 8 }}>
         <Input
-          type=""
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
@@ -146,45 +150,41 @@ export const DashComments = () => {
       ),
   });
 
-  const tableStyle = {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    overflowX: "auto",
-  };
-
-  const columnStyle = {
-    minWidth: "150px",
+  const handleTableChange = (pagination) => {
+    setCurrent(pagination.current);
+    setPageSize(pagination.pageSize);
   };
 
   return (
-    <div style={tableStyle}>
-      <Table dataSource={comments} rowKey="id" style={{ width: "100%" }}>
+    <div style={{ width: "100%", overflowX: "auto" }}>
+      <Table
+        dataSource={comments}
+        rowKey="id"
+        pagination={{
+          current,
+          pageSize,
+          total,
+          showSizeChanger: true,
+        }}
+        onChange={handleTableChange}
+      >
         <Column
           title="Comment ID"
           dataIndex="id"
           key="id"
-          style={columnStyle}
           {...getColumnSearchProps("id")}
         />
         <Column
           title="Comments"
           dataIndex="content"
           key="content"
-          style={columnStyle}
           {...getColumnSearchProps("content")}
         />
-        <Column
-          title="ID User"
-          dataIndex="userId"
-          key="userId"
-          style={columnStyle}
-        />
+        <Column title="ID User" dataIndex="userId" key="userId" />
         <Column
           title="Likes"
           dataIndex="numberOfLikes"
           key="numberOfLikes"
-          style={columnStyle}
           sorter={(a, b) => a.numberOfLikes - b.numberOfLikes}
         />
         <Column
@@ -192,7 +192,6 @@ export const DashComments = () => {
           dataIndex="updatedAt"
           key="updatedAt"
           render={(text) => moment(text).format("DD/MM/YYYY HH:mm:ss")}
-          style={columnStyle}
         />
         <Column
           title="Action"
@@ -201,13 +200,12 @@ export const DashComments = () => {
             <Space size="middle">
               <Button
                 type="primary"
-                onClick={() => showDeleteConfirm(record.id, fetchComments)}
+                onClick={() => showDeleteConfirm(record.id)}
               >
                 Delete
               </Button>
             </Space>
           )}
-          style={columnStyle}
         />
       </Table>
     </div>
