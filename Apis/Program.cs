@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowRenderFrontend",
         policy =>
         {
-            policy.WithOrigins("https://books-webapplication-plh6.onrender.com/") // Thay bằng URL của frontend trên Render
+            policy.WithOrigins("https://books-webapplication-plh6.onrender.com") // Thay bằng URL của frontend trên Render
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
