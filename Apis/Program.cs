@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
             policy.WithOrigins(
                 "https://books-webapplication-plh6.onrender.com", // Render frontend
                 "http://localhost:5173", // Local development frontend
-                "https://sweet-heliotrope-b07b6d.netlify.app" // Netlify frontend
+                "https://reading-books-2010.netlify.app" // Netlify frontend
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
