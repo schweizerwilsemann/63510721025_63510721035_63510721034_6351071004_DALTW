@@ -26,7 +26,7 @@ export default function CommentSection({ bookId }) {
     }
     try {
       const response = await axios.post(
-        `/api/comments`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/comments`,
         { content: comment, bookId, userId: currentUser.id },
         {
           headers: {
@@ -51,7 +51,7 @@ export default function CommentSection({ bookId }) {
         return;
       }
       const res = await axios.post(
-        `/api/comments/${commentId}/likes`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/comments/${commentId}/likes`,
         {},
         {
           headers: {
@@ -80,7 +80,9 @@ export default function CommentSection({ bookId }) {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await fetch(`/api/comments/book/${bookId}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/comments/book/${bookId}`
+        );
         if (res.ok) {
           const data = await res.json();
           setComments(data);
@@ -107,11 +109,14 @@ export default function CommentSection({ bookId }) {
         navigate("/sign-in");
         return;
       }
-      const res = await axios.delete(`/api/comments/${commentId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/api/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       if (res) {
         setComments(comments.filter((comment) => comment.id !== commentId));
       }

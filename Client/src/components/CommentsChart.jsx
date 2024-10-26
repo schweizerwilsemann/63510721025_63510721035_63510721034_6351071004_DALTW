@@ -23,11 +23,14 @@ export const CommentsChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/comments", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/comments`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         const formattedData = response.data.comments.map((comment) => ({
           date: moment(comment.updatedAt).format("YYYY-MM-DD HH:mm"),

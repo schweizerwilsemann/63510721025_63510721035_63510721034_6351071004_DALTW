@@ -1,63 +1,69 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Form, Input, Flex } from 'antd'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, Flex } from "antd";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 import {
   signInStart,
   signInSuccess,
   signInFailure,
-} from '../redux/user/UserSlice'
-import { toast } from 'react-toastify'
-import OAuth from '../components/Oauth'
+} from "../redux/user/UserSlice";
+import { toast } from "react-toastify";
+import OAuth from "../components/Oauth";
 
 export default function SignIn() {
-  const [error, setError] = useState('')
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const [isToastVisible, setIsToastVisible] = useState(false)
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isToastVisible, setIsToastVisible] = useState(false);
 
   const onFinish = async (values) => {
     try {
-      dispatch(signInStart())
-      const response = await axios.post('/api/auth/login', values)
+      dispatch(signInStart());
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        values
+      );
 
       if (response) {
-        const { token } = response.data
-        localStorage.setItem('token', token)
+        const { token } = response.data;
+        localStorage.setItem("token", token);
 
-        const currentUserInfo = await axios.get('/api/users/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        dispatch(signInSuccess(currentUserInfo.data))
+        const currentUserInfo = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        dispatch(signInSuccess(currentUserInfo.data));
 
-        toast.success('Login Successfully')
-        navigate('/')
+        toast.success("Login Successfully");
+        navigate("/");
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         if (!isToastVisible) {
-          toast.error('Invalid username or password')
-          setIsToastVisible(true)
-          setTimeout(() => setIsToastVisible(false), 3000)
-          dispatch(signInFailure(error.response))
+          toast.error("Invalid username or password");
+          setIsToastVisible(true);
+          setTimeout(() => setIsToastVisible(false), 3000);
+          dispatch(signInFailure(error.response));
         }
-        setError('Invalid username or password')
+        setError("Invalid username or password");
       } else {
         if (!isToastVisible) {
-          toast.error('An unexpected error occurred. Please try again later.')
-          setIsToastVisible(true)
-          dispatch(signInFailure(error.response))
-          setTimeout(() => setIsToastVisible(false), 3000)
+          toast.error("An unexpected error occurred. Please try again later.");
+          setIsToastVisible(true);
+          dispatch(signInFailure(error.response));
+          setTimeout(() => setIsToastVisible(false), 3000);
         }
-        setError('An unexpected error occurred. Please try again later.')
+        setError("An unexpected error occurred. Please try again later.");
       }
-      console.error('>>>Login failed', error)
+      console.error(">>>Login failed", error);
     }
-  }
+  };
 
   return (
     <>
@@ -97,15 +103,15 @@ export default function SignIn() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Username!',
+                    message: "Please input your Username!",
                   },
                 ]}
               >
                 <Input
                   style={{
-                    width: '100%',
-                    height: '45px',
-                    fontSize: '16px',
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
                   }}
                   prefix={<UserOutlined />}
                   placeholder="Username"
@@ -116,15 +122,15 @@ export default function SignIn() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Password!',
+                    message: "Please input your Password!",
                   },
                 ]}
               >
                 <Input
                   style={{
-                    width: '100%',
-                    height: '45px',
-                    fontSize: '16px',
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
                   }}
                   prefix={<LockOutlined />}
                   type="password"
@@ -136,7 +142,7 @@ export default function SignIn() {
                   <Form.Item name="remember" valuePropName="checked" noStyle>
                     <Checkbox>Remember me</Checkbox>
                   </Form.Item>
-                  <Link to={''}>Forgot password</Link>
+                  <Link to={""}>Forgot password</Link>
                 </Flex>
               </Form.Item>
 
@@ -144,25 +150,25 @@ export default function SignIn() {
                 <Button
                   className="bg-orange-400 text-sky-50"
                   style={{
-                    width: '100%',
-                    height: '45px',
-                    fontSize: '16px',
+                    width: "100%",
+                    height: "45px",
+                    fontSize: "16px",
                   }}
                   block
                   type=""
                   htmlType="submit"
                   onMouseEnter={(e) =>
-                    (e.currentTarget.style.backgroundColor = '#FFFF00')
+                    (e.currentTarget.style.backgroundColor = "#FFFF00")
                   } // Màu nền khi hover
                   onMouseLeave={(e) =>
-                    (e.currentTarget.style.backgroundColor = '#f97316')
+                    (e.currentTarget.style.backgroundColor = "#f97316")
                   }
                 >
                   Log in
                 </Button>
                 <OAuth />
-                or{' '}
-                <Link className="font-semibold text-rose-400" to={'/sign-up'}>
+                or{" "}
+                <Link className="font-semibold text-rose-400" to={"/sign-up"}>
                   Register now!
                 </Link>
               </Form.Item>
@@ -171,5 +177,5 @@ export default function SignIn() {
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -12,7 +12,7 @@ const StarRating = ({ bookInfos, userId }) => {
     const { id, author, title, genre, image } = bookInfos;
     try {
       const response = await axios.post(
-        `/api/starsrating`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/starsrating`,
         { bookId: id, author, title, genre, image, userId, stars: rate },
         {
           headers: {
@@ -46,7 +46,11 @@ const StarRating = ({ bookInfos, userId }) => {
 
   const fetchBookRating = async () => {
     try {
-      const response = await axios.get(`/api/starsrating/book/${bookInfos.id}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/starsrating/book/${
+          bookInfos.id
+        }`
+      );
       const { averageStars, totalRatings } = response.data;
       setAverageRating(averageStars);
       setTotalRatings(totalRatings);

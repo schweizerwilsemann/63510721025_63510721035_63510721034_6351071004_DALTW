@@ -16,7 +16,9 @@ const BookDetail = () => {
     const fetchBook = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/books/${slug}`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/books/${slug}`
+        );
         const data = await response.json();
         setBook(data);
       } finally {

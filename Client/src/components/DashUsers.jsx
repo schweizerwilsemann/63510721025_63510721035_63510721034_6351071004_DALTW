@@ -16,11 +16,14 @@ export const DashUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("/api/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       setUsers(response.data);
     } catch (error) {
       setError(error.message);
@@ -33,7 +36,9 @@ export const DashUsers = () => {
 
   const deactivateUser = async (id) => {
     try {
-      await axios.delete(`/api/users/delete/${id}`);
+      await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/api/users/delete/${id}`
+      );
       fetchUsers();
     } catch (error) {
       setError(error.message);
@@ -43,7 +48,7 @@ export const DashUsers = () => {
   const activateUser = async (id) => {
     try {
       await axios.put(
-        `/api/users/activate/${id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/users/activate/${id}`,
         {},
         {
           headers: {

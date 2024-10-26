@@ -18,11 +18,14 @@ export const DashPendingBooks = ({ setPendingCount }) => {
   const fetchBooks = async () => {
     try {
       if (currentUser.isAdmin) {
-        const response = await axios.get(`/api/booksold/pending`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/booksold/pending`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setBooks(response.data);
       } else {
         setError("You do not have permission to get pending book");
@@ -39,7 +42,7 @@ export const DashPendingBooks = ({ setPendingCount }) => {
   const approveBook = async (id) => {
     try {
       await axios.put(
-        `/api/booksold/${id}/approve`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/booksold/${id}/approve`,
         {},
         {
           headers: {
@@ -56,7 +59,7 @@ export const DashPendingBooks = ({ setPendingCount }) => {
   const rejectBook = async (id) => {
     try {
       await axios.put(
-        `/api/booksold/${id}/reject`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/booksold/${id}/reject`,
         {},
         {
           headers: {

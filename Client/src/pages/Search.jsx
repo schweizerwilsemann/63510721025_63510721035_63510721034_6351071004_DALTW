@@ -35,7 +35,9 @@ export default function Search() {
     const fetchBooks = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/books/search?${searchQuery}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/books/search?${searchQuery}`
+      );
       if (!res.ok) {
         setLoading(false);
         return;
@@ -68,7 +70,11 @@ export default function Search() {
     const startIndex = books.length;
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
-    const res = await fetch(`/api/books/search?${urlParams.toString()}`);
+    const res = await fetch(
+      `${
+        import.meta.env.VITE_API_BASE_URL
+      }/api/books/search?${urlParams.toString()}`
+    );
     if (!res.ok) return;
 
     const data = await res.json();

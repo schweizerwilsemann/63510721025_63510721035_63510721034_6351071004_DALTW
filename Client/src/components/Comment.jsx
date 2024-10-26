@@ -14,11 +14,14 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get(`/api/users/${comment.userId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/${comment.userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         if (response) {
           setUser(response.data);
         }
@@ -45,7 +48,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
       }
 
       const response = await axios.put(
-        `/api/comments/${comment.id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/comments/${comment.id}`,
         { editedContent },
         {
           headers: {

@@ -34,11 +34,14 @@ export default function DashSidebar() {
   const fetchPendingBooksCount = async () => {
     try {
       if (currentUser.isAdmin) {
-        const response = await axios.get("/api/booksold/pending", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/booksold/pending`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setPendingCount(response.data.length); // Giả sử response.data là mảng các sách pending
       } else {
       }

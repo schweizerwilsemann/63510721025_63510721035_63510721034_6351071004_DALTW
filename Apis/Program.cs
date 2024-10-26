@@ -15,7 +15,16 @@ var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb")
                             ?? throw new InvalidOperationException("MongoDb connection string not found.");
 
 var databaseName = "Library";
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowRenderFrontend",
+        policy =>
+        {
+            policy.WithOrigins("https://books-webapplication-plh6.onrender.com/") // Thay bằng URL của frontend trên Render
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 builder.Services.AddSingleton(new MongoDbContext(mongoConnectionString, databaseName));
 builder.Services.AddControllers();
 builder.Services.AddSession();

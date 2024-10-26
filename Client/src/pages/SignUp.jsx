@@ -10,7 +10,10 @@ export default function SignIn() {
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
 
-    const response = await axios.post("/api/auth/signup", values);
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`,
+      values
+    );
     navigate("/sign-in");
   };
   return (

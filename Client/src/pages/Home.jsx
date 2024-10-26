@@ -12,7 +12,9 @@ const Home = () => {
 
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
-    const response = await fetch("/api/books");
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/api/books`
+    );
     const result = await response.json();
 
     setBooks(result);
@@ -22,7 +24,9 @@ const Home = () => {
   useEffect(() => {
     const fetchHotBooks = async () => {
       try {
-        const response = await axios.get(`/api/starsrating/hot-books`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/starsrating/hot-books`
+        );
         setHotBooks(response.data);
       } catch (error) {
         console.error("Error fetching book sold data:", error);

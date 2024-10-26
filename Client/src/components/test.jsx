@@ -8,7 +8,9 @@ export default function test() {
   useEffect(() => {
     const getTestAPI = async () => {
       try {
-        const res = await fetch(`/api/user`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/user`
+        );
         const data = await res.text();
 
         if (res.ok) {

@@ -30,14 +30,17 @@ export default function DashboardComponent() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`/api/users/statistic`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          params: {
-            dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/statistic`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            params: {
+              dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
+            },
+          }
+        );
         if (response.data) {
           setUsers(response.data.users);
           setTotalUsers(response.data.totalUsers);
@@ -50,14 +53,17 @@ export default function DashboardComponent() {
 
     const fetchBooks = async () => {
       try {
-        const response = await axios.get(`/api/booksold/sold-books`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          params: {
-            dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/booksold/sold-books`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            params: {
+              dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
+            },
+          }
+        );
         if (response.data) {
           setBooks(response.data.books);
           setTotalBooks(response.data.totalSoldBooks);
@@ -70,14 +76,17 @@ export default function DashboardComponent() {
 
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`/api/comments`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          params: {
-            dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/comments`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            params: {
+              dateFilter: getLastMonthDate(), // Truyền thời gian 30 ngày trước vào API
+            },
+          }
+        );
         if (response.data) {
           setComments(response.data.comments);
           setTotalComments(response.data.totalComments);

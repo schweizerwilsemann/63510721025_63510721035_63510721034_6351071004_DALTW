@@ -18,15 +18,18 @@ export default function OAuth() {
     });
     try {
       const resultsFromGoogle = await signInWithPopup(auth, provider);
-      const res = await fetch("/api/auth/google-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: resultsFromGoogle.user.displayName,
-          email: resultsFromGoogle.user.email,
-          googlePhotoURL: resultsFromGoogle.user.photoURL,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/google-login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: resultsFromGoogle.user.displayName,
+            email: resultsFromGoogle.user.email,
+            googlePhotoURL: resultsFromGoogle.user.photoURL,
+          }),
+        }
+      );
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("token", data.token);

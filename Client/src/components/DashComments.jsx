@@ -19,11 +19,14 @@ export const DashComments = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get("/api/comments", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       console.log(response.data);
       setComments(response.data.comments);
     } catch (error) {
@@ -46,11 +49,14 @@ export const DashComments = () => {
       cancelText: "Cancel",
       onOk() {
         axios
-          .delete(`/api/comments/${commentId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          })
+          .delete(
+            `${import.meta.env.VITE_API_BASE_URL}/api/comments/${commentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          )
           .then(() => {
             fetchComments();
           })

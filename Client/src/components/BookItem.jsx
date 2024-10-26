@@ -30,11 +30,14 @@ const BookItem = ({ book }) => {
 
     const fetchBookSold = async () => {
       try {
-        const response = await axios.get(`/api/booksold/${book.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/booksold/${book.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setCurrentBook(response.data);
       } catch (error) {
         console.error("Error fetching book sold data:", error);
@@ -49,7 +52,9 @@ const BookItem = ({ book }) => {
   useEffect(() => {
     const fetchHotBooks = async () => {
       try {
-        const response = await axios.get(`/api/starsrating/hot-books`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/starsrating/hot-books`
+        );
         setHotBooks(response.data);
       } catch (error) {
         console.error("Error fetching book sold data:", error);
@@ -117,11 +122,15 @@ const BookItem = ({ book }) => {
     };
 
     try {
-      const response = await axios.post(`/api/booksold`, value, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/booksold`,
+        value,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (response.status === 201 || response.status === 200) {
         toast.success(response.data);

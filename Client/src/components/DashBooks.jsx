@@ -22,7 +22,9 @@ export const DashBooks = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get("/api/books");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/books`
+      );
       setBooks(response.data);
     } catch (error) {
       setError(error.message);
@@ -39,11 +41,14 @@ export const DashBooks = () => {
   const deleteBook = async (id) => {
     try {
       setIsDeleteModalOpen(true);
-      const response = await axios.delete(`/api/books/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/api/books/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       if (response.status === 201 || response.status === 200) {
         setIsDeleteModalOpen(false);
         toast.success("Book deleted successfully!");

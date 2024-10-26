@@ -103,13 +103,18 @@ export default function DashProfile() {
 
     try {
       dispatch(updateStart());
-      const res = await fetch(`/api/users/update/${currentUser.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/users/update/${
+          currentUser.id
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await res.json();
 
@@ -131,9 +136,14 @@ export default function DashProfile() {
     setShowModal(false);
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/users/delete/${currentUser.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/users/delete/${
+          currentUser.id
+        }`,
+        {
+          method: "DELETE",
+        }
+      );
       const data = await res.json();
 
       if (!res.ok) {

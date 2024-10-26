@@ -113,11 +113,15 @@ export const UploadBook = () => {
         content: content,
       };
 
-      const response = await axios.post("/api/books", book_infos, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/books`,
+        book_infos,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (response.status === 201) {
         toast.success("Book uploaded successfully!");

@@ -116,7 +116,7 @@ const ModalUpdateBook = ({ open, onCancel, onUpdate, book }) => {
         content: content,
       };
       const response = await axios.put(
-        `/api/books/update/${book.id}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/books/update/${book.id}`,
         bookInfos,
         {
           headers: {

@@ -15,7 +15,7 @@ export default function DashUserBoughtBooks() {
     const fetchBooks = async () => {
       setLoading(true);
       const res = await axios.get(
-        `/api/booksold/user/bought-books`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/booksold/user/bought-books`,
 
         {
           headers: {
@@ -39,7 +39,11 @@ export default function DashUserBoughtBooks() {
     const startIndex = books.length;
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
-    const res = await fetch(`/api/books/search?${urlParams.toString()}`);
+    const res = await fetch(
+      `${
+        import.meta.env.VITE_API_BASE_URL
+      }/api/books/search?${urlParams.toString()}`
+    );
     if (!res.ok) return;
 
     const data = await res.json();
