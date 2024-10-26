@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:5173"],
+    "origin": ["https://books-webapplication-plh6.onrender.com"],
     "method": ["GET", "POST", "PUT"],
     "maxAgeSeconds": 3600,
     "responseHeader": ["Content-Type", "Authorization"]
