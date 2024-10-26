@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
             policy.WithOrigins(
                 "https://books-webapplication-plh6.onrender.com", // Render frontend
                 "http://localhost:5173", // Local development frontend
-                "https://reading-books-2010.vercel.app/" // Vercel frontend
+                "https://reading-books-2010.vercel.app" // Vercel frontend
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
