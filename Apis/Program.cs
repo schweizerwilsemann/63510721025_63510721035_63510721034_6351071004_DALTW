@@ -16,7 +16,20 @@ var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb")
 
 var databaseName = "Library";
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowRenderFrontend",
+        policy =>
+        {
+            policy.WithOrigins(
+                "https://books-webapplication-plh6.onrender.com", // Render frontend
+                "http://localhost:5173", // Local development frontend
+                "https://sweet-heliotrope-b07b6d.netlify.app" // Netlify frontend
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
 builder.Services.AddSingleton(new MongoDbContext(mongoConnectionString, databaseName));
 builder.Services.AddControllers();
 builder.Services.AddSession();
@@ -69,22 +82,7 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 
-if (app.Environment.IsDevelopment())
-{
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("AllowAll",
-            policy =>
-            {
-                policy.AllowAnyOrigin()
-                      .AllowAnyHeader()
-                      .AllowAnyMethod();
-            });
-    });
-    app.UseCors("AllowAll");
-}
-
-
+app.UseCors("AllowRenderFrontend");
 app.UseHttpsRedirection();
 app.UseSession(); 
 app.UseAuthentication(); 
