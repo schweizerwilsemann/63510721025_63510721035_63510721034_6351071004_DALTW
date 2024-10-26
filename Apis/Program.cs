@@ -15,19 +15,7 @@ var mongoConnectionString = builder.Configuration.GetConnectionString("MongoDb")
                             ?? throw new InvalidOperationException("MongoDb connection string not found.");
 
 var databaseName = "Library";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowRenderFrontend",
-        policy =>
-        {
-            policy.WithOrigins(
-                "https://books-webapplication-plh6.onrender.com", // Render frontend
-                "http://localhost:5173" // Local development frontend
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        });
-});
+
 
 builder.Services.AddSingleton(new MongoDbContext(mongoConnectionString, databaseName));
 builder.Services.AddControllers();
@@ -80,7 +68,22 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowRenderFrontend");
+
+if (app.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll",
+            policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+    });
+    app.UseCors("AllowAll");
+}
+
 
 app.UseHttpsRedirection();
 app.UseSession(); 
