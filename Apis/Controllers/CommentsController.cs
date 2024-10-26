@@ -136,7 +136,9 @@ public class CommentsController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetComments([FromQuery] int startIndex = 0, [FromQuery] int limit = 10, [FromQuery] string? sort = "asc")
+    public async Task<IActionResult> GetComments([FromQuery] int startIndex = 0, 
+                                        [FromQuery] int limit = 10, 
+                                        [FromQuery] string? sort = "asc")
     {
         var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
         
@@ -162,4 +164,26 @@ public class CommentsController : ControllerBase
 
         return Ok(new { comments, totalComments, lastMonthComments });
     }
+
+    [HttpGet("all")]
+    [Authorize]
+    public async Task<IActionResult> GetAllComments()
+    {
+        var currentUsername = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? "";
+        
+        var user = await _context.Users.Find(u => u.Username == currentUsername).FirstOrDefaultAsync();
+        
+
+        if ( user == null || !user.IsAdmin)
+        {
+            return Forbid("You do not have permission to get all comments.");
+        }
+        var comments = await _context.Comment.Find(FilterDefinition<Comment>.Empty).SortByDescending(book => book.CreatedAt).ToListAsync();
+         var totalComments = await _context.Comment.CountDocumentsAsync(_ => true);
+        var now = DateTime.UtcNow;
+        var oneMonthAgo = now.AddMonths(-1);
+        var lastMonthComments = await _context.Comment.CountDocumentsAsync(c => c.CreatedAt >= oneMonthAgo);
+        return Ok(new { comments, totalComments, lastMonthComments });
+    }
+
 }

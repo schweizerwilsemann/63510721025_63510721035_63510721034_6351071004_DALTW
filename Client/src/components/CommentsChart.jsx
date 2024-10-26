@@ -24,7 +24,7 @@ export const CommentsChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/comments`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/comments/all`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
