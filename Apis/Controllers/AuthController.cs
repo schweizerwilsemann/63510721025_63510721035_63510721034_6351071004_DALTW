@@ -57,7 +57,16 @@ namespace Apis.Controllers
             var token = GenerateJwtToken(user);
             return Ok(new { token });
         }
-
+        [HttpGet("getUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail([FromBody] EmailCheckRequest request)
+        {
+           var user = await _context.Users.Find(u => u.Email == request.Email).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return Unauthorized("Email not found");
+            }
+            return Ok(user);
+        }
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
@@ -162,7 +171,10 @@ namespace Apis.Controllers
         public string? Username { get; set; }
         public string? Password { get; set; }
     }
-
+    public class EmailCheckRequest
+    {
+        public string? Email { get; set; }
+    }
     public class GoogleLoginRequest
     {
         public required string Email { get; set; }
