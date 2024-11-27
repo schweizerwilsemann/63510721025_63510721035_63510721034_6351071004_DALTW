@@ -57,7 +57,7 @@ namespace Apis.Controllers
             var token = GenerateJwtToken(user);
             return Ok(new { token });
         }
-        [HttpGet("getUserByEmail")]
+        [HttpPost("getUserByEmail")]
         public async Task<IActionResult> GetUserByEmail([FromBody] EmailCheckRequest request)
         {
            var user = await _context.Users.Find(u => u.Email == request.Email).FirstOrDefaultAsync();
