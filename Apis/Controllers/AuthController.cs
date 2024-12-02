@@ -67,6 +67,35 @@ namespace Apis.Controllers
             }
             return Ok(user);
         }
+        [HttpPost("checkPassword")]
+        public async Task<IActionResult> CheckPassword([FromBody] LoginRequest request)
+        {
+           var user = await _context.Users.Find(u => u.Username == request.Username).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return Unauthorized("Invalid username or password");
+            }
+            if (!user.IsActive)
+            {
+                return Unauthorized("User is deleted");
+            }
+            // Check if the password is hashed
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            {
+
+                // If not, hash the plain text password and update the user record
+                if (user.PasswordHash == request.Password)
+                {
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                    await _context.Users.ReplaceOneAsync(u => u.Id == user.Id, user);
+                }
+                else
+                {
+                    return Unauthorized("Invalid username or password");
+                }
+            }
+            return Ok();
+        }
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {

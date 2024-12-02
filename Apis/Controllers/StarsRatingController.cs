@@ -136,20 +136,27 @@ public class StarsRatingController : ControllerBase
                 .Limit(10)
                 .ToListAsync();
 
-            var hotBooksWithDetails = hotBooks.Select(h => new
+            var hotBooksWithDetails = new List<object>();
+
+            foreach (var h in hotBooks)
             {
-                h.BookId,
-                h.AverageStars,
-                h.OneStar,
-                h.TwoStars,
-                h.ThreeStars,
-                h.FourStars,
-                h.FiveStars,
-                BookDetails = _context.Books.Find(b => b.Id == h.BookId).FirstOrDefault()
-            }).ToList();
+                var bookDetails = await _context.Books.Find(b => b.Id == h.BookId).FirstOrDefaultAsync();
+                hotBooksWithDetails.Add(new
+                {
+                    h.BookId,
+                    h.AverageStars,
+                    h.OneStar,
+                    h.TwoStars,
+                    h.ThreeStars,
+                    h.FourStars,
+                    h.FiveStars,
+                    BookDetails = bookDetails
+                });
+            }
 
             return Ok(hotBooksWithDetails);
         }
+
         
         [HttpGet("book/{bookId:length(24)}")]
         public async Task<IActionResult> GetBookRating(string bookId)
