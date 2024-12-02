@@ -178,7 +178,7 @@ public class BookSoldController : ControllerBase
             return NotFound("Book not found or you do not have permission to access it.");
         }
 
-        return Ok(bookSold);
+        return Ok(bookSold);   
     }
 
     [HttpPost]
