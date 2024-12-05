@@ -121,7 +121,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
               <button
                 className={`text-gray-400 hover:text-sky-300 ${
                   currentUser &&
-                  comment.likes.includes(currentUser.id) &&
+                  comment.likes?.includes(currentUser?.id) &&
                   "!text-sky-300"
                 } `}
                 type="button"
