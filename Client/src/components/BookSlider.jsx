@@ -41,11 +41,14 @@ export const BookSlider = ({ books }) => {
       modules={[Navigation, Autoplay]}
       navigation={true}
     >
-      {books.reverse().map((book) => (
-        <SwiperSlide key={book.id}>
-          <Book book={book} />
-        </SwiperSlide>
-      ))}
+      {books
+        .filter((book) => book) // Filter out null or undefined books
+        .reverse()
+        .map((book) => (
+          <SwiperSlide key={book.id}>
+            <Book book={book} />
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 };
