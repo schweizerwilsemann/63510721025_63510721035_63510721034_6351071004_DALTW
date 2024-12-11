@@ -246,8 +246,6 @@ const BookItem = ({ book }) => {
                         ? "green"
                         : index === 2
                         ? "blue"
-                        : index == 3
-                        ? "gray"
                         : "white"
                     }-500 border border-transparent rounded-full w-8 h-8 flex items-center justify-center`}
                   >
