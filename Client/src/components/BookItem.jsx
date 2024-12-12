@@ -246,13 +246,11 @@ const BookItem = ({ book }) => {
                         ? "green"
                         : index === 2
                         ? "blue"
-                        : index == 3
-                        ? "gray"
-                        : "white"
+                        : "gray"
                     }-500 border border-transparent rounded-full w-8 h-8 flex items-center justify-center`}
                   >
                     <p
-                      className={`text-${index === 3 ? "dark" : "white"} bold`}
+                      className="text-white bold"
                     >
                       {index + 1}
                     </p>
