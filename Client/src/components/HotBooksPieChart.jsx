@@ -27,7 +27,10 @@ const HotBooksPieChart = () => {
 
         const hotBooksArray = response.data.map((book) => book.bookDetails);
 
-        const groupedData = hotBooksArray.reduce((acc, book) => {
+        // Filter out invalid or null entries
+        const validBooks = hotBooksArray.filter((book) => book && book.genre);
+
+        const groupedData = validBooks.reduce((acc, book) => {
           const genre = book.genre;
           if (!acc[genre]) {
             acc[genre] = 0;
