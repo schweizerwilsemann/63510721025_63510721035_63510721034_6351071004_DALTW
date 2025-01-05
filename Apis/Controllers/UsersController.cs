@@ -124,6 +124,12 @@ namespace Apis.Controllers
 
             if (!string.IsNullOrEmpty(updatedUser.Email))
             {
+                // Check if the email already exists in the database
+                var emailExists = await _context.Users.Find(Builders<User>.Filter.Eq(u => u.Email, updatedUser.Email)).AnyAsync();
+                if (emailExists)
+                {
+                    return Conflict("Email already exists");
+                }
                 updateDefinition.Add(Builders<User>.Update.Set(u => u.Email, updatedUser.Email));
             }
 
@@ -140,6 +146,12 @@ namespace Apis.Controllers
 
             if (!string.IsNullOrEmpty(updatedUser.Username))
             {
+                // Check if the username already exists in the database
+                var usernameExists = await _context.Users.Find(Builders<User>.Filter.Eq(u => u.Username, updatedUser.Username)).AnyAsync();
+                if (usernameExists)
+                {
+                    return Conflict("Username already exists");
+                }
                 updateDefinition.Add(Builders<User>.Update.Set(u => u.Username, updatedUser.Username));
             }
 
@@ -159,10 +171,29 @@ namespace Apis.Controllers
                 return NotFound("User not found");
             }
 
-            return Ok(result); // Trả về đối tượng người dùng đã cập nhật
+            // Update username and email in BookSold collection
+            var bookSoldFilter = Builders<BookSold>.Filter.Eq("user_id", id);
+            var bookSoldUpdates = new List<UpdateDefinition<BookSold>>();
+
+            if (!string.IsNullOrEmpty(updatedUser.Email))
+            {
+                bookSoldUpdates.Add(Builders<BookSold>.Update.Set(b => b.Email, updatedUser.Email));
+            }
+
+            if (!string.IsNullOrEmpty(updatedUser.Username))
+            {
+                bookSoldUpdates.Add(Builders<BookSold>.Update.Set(b => b.Username, updatedUser.Username));
+            }
+
+            if (bookSoldUpdates.Any())
+            {
+                var bookSoldUpdate = Builders<BookSold>.Update.Combine(bookSoldUpdates);
+                await _context.BookSold.UpdateManyAsync(bookSoldFilter, bookSoldUpdate);
+            }
+
+            return Ok(result); // Return the updated user object
         }
 
-        
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> SoftDeleteUser(string id)
         {
