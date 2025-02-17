@@ -121,6 +121,7 @@ public class StarsRatingController : ControllerBase
         [HttpGet("hot-books")]
         public async Task<IActionResult> GetHotBooks()
         {
+            // Get hot books with their ratings
             var hotBooks = await _context.StarsRatings.Aggregate()
                 .Group(r => r.BookId, g => new BookRatingSummary
                 {
@@ -136,6 +137,7 @@ public class StarsRatingController : ControllerBase
                 .Limit(10)
                 .ToListAsync();
 
+            // Identify and filter out records where BookDetails is null
             var hotBooksWithDetails = hotBooks.Select(h => new
             {
                 h.BookId,
@@ -148,8 +150,24 @@ public class StarsRatingController : ControllerBase
                 BookDetails = _context.Books.Find(b => b.Id == h.BookId).FirstOrDefault()
             }).ToList();
 
+            var booksToRemove = hotBooksWithDetails.Where(h => h.BookDetails == null).ToList();
+
+            //Remove the identified records from StarsRatings
+            foreach (var book in booksToRemove)
+            {
+                var recordsToRemove = _context.StarsRatings.Find(r => r.BookId == book.BookId).ToList();
+                foreach (var record in recordsToRemove)
+                {
+                    _context.StarsRatings.DeleteOne(r => r.Id == record.Id);
+                }
+            }
+
+            //Filter out the records with null BookDetails for the final list
+            hotBooksWithDetails = hotBooksWithDetails.Where(h => h.BookDetails != null).ToList();
+
             return Ok(hotBooksWithDetails);
         }
+
         
         [HttpGet("book/{bookId:length(24)}")]
         public async Task<IActionResult> GetBookRating(string bookId)
