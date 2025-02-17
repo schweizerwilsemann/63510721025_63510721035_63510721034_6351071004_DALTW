@@ -1,0 +1,4 @@
+.pdf-page {
+  height: 800px; /* Set your desired height here */
+  overflow: hidden; /* This will ensure that any overflow content is hidden */
+}
